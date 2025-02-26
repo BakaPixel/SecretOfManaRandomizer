@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <!--<ImplicitUsings>enable</ImplicitUsings>-->
+    <!--<Nullable>enable</Nullable>-->
+    <RootNamespace>SoMRandomizer.api</RootNamespace>
+    <PublishAot>true</PublishAot>
+    <LangVersion>latest</LangVersion>
+    <PackageId>SoMRandomizer.api</PackageId>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SoMRandomizer\SoMRandomizer.csproj" />
+  </ItemGroup>
+</Project>
+

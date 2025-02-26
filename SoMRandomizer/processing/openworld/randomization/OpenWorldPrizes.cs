@@ -4,6 +4,7 @@ using SoMRandomizer.processing.hacks.openworld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SoMRandomizer.native;
 using static SoMRandomizer.processing.openworld.PlandoProperties;
 
 namespace SoMRandomizer.processing.openworld.randomization
@@ -77,7 +78,6 @@ namespace SoMRandomizer.processing.openworld.randomization
                 "metal mantis (new item)",
                 "triple tonpole",
             }.ToList();
-
         public static List<PrizeItem> getForSelectedOptions(RandoSettings settings, RandoContext context, List<PrizeLocation> allLocations)
         {
             List<PrizeItem> allPrizes = new List<PrizeItem>();
@@ -147,17 +147,17 @@ namespace SoMRandomizer.processing.openworld.randomization
             List<byte> altStarterWeaponFlags = new List<byte>();
             int starterWeaponId = -1;
 
-            if (startWithBoy && startingChar != "boy")
+            if (startWithBoy && startingChar != OpenWorldPrizeNames.BOY)
             {
                 altStarterWeaponFlags.Add((byte)(0xC0 + boyStarterWeapon));
                 altStarterWeaponFlags.Add((byte)(0xC8 + boyStarterWeapon));
             }
-            if (startWithGirl && startingChar != "girl")
+            if (startWithGirl && startingChar != OpenWorldPrizeNames.GIRL)
             {
                 altStarterWeaponFlags.Add((byte)(0xC0 + girlStarterWeapon));
                 altStarterWeaponFlags.Add((byte)(0xC8 + girlStarterWeapon));
             }
-            if (startWithSprite && startingChar != "sprite")
+            if (startWithSprite && startingChar != OpenWorldPrizeNames.SPRITE)
             {
                 altStarterWeaponFlags.Add((byte)(0xC0 + spriteStarterWeapon));
                 altStarterWeaponFlags.Add((byte)(0xC8 + spriteStarterWeapon));
@@ -165,17 +165,17 @@ namespace SoMRandomizer.processing.openworld.randomization
 
             byte starterWeaponFlag = 0;
 
-            if (startingChar == "boy")
+            if (startingChar == OpenWorldPrizeNames.BOY)
             {
                 starterWeaponFlag = (byte)(0xC0 + boyStarterWeapon);
                 starterWeaponId = boyStarterWeapon;
             }
-            if (startingChar == "girl")
+            if (startingChar == OpenWorldPrizeNames.GIRL)
             {
                 starterWeaponFlag = (byte)(0xC0 + girlStarterWeapon);
                 starterWeaponId = girlStarterWeapon;
             }
-            if (startingChar == "sprite")
+            if (startingChar == OpenWorldPrizeNames.SPRITE)
             {
                 starterWeaponFlag = (byte)(0xC0 + spriteStarterWeapon);
                 starterWeaponId = spriteStarterWeapon;
@@ -248,7 +248,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 }
                 else
                 {
-                    allPrizes.Add(new PrizeItem("glove", "weapon", gloveEventData.ToArray(), "the glove", 0xC8, 0.8));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.GLOVE, "weapon", gloveEventData.ToArray(), "the glove", 0xC8, 0.8));
                 }
             }
 
@@ -281,7 +281,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     swordEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Sword"));
-                    allPrizes.Add(new PrizeItem("sword", "weapon", swordEventData.ToArray(), "the sword", 0xc9, 1.5));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.SWORD, "weapon", swordEventData.ToArray(), "the sword", 0xc9, 1.5));
                 }
             }
 
@@ -314,7 +314,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     axeEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Axe"));
-                    allPrizes.Add(new PrizeItem("axe", "weapon", axeEventData.ToArray(), "the axe", 0xca, 2.0));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.AXE, "weapon", axeEventData.ToArray(), "the axe", 0xca, 2.0));
                 }
             }
 
@@ -346,7 +346,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     spearEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Spear"));
-                    allPrizes.Add(new PrizeItem("spear", "weapon", spearEventData.ToArray(), "the spear", 0xcb, 0.8));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.SPEAR, "weapon", spearEventData.ToArray(), "the spear", 0xcb, 0.8));
                 }
             }
 
@@ -379,7 +379,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     whipEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Whip"));
-                    allPrizes.Add(new PrizeItem("whip", "weapon", whipEventData.ToArray(), "the whip", 0xcc, 2.0));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.WHIP, "weapon", whipEventData.ToArray(), "the whip", 0xcc, 2.0));
                 }
             }
 
@@ -411,7 +411,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     bowEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Bow"));
-                    allPrizes.Add(new PrizeItem("bow", "weapon", bowEventData.ToArray(), "the bow", 0xcd, 0.8));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.BOW, "weapon", bowEventData.ToArray(), "the bow", 0xcd, 0.8));
                 }
             }
 
@@ -443,7 +443,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     boomerangEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Boomerang"));
-                    allPrizes.Add(new PrizeItem("boomerang", "weapon", boomerangEventData.ToArray(), "the boomerang", 0xce, 0.8));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.BOOMERANG, "weapon", boomerangEventData.ToArray(), "the boomerang", 0xce, 0.8));
                 }
             }
 
@@ -476,7 +476,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     javelinEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Javelin"));
-                    allPrizes.Add(new PrizeItem("javelin", "weapon", javelinEventData.ToArray(), "the javelin", 0xcf, 1.0));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.JAVELIN, "weapon", javelinEventData.ToArray(), "the javelin", 0xcf, 1.0));
                 }
             }
 
@@ -512,7 +512,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 undineSeedEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the water seed"));
-                allPrizes.Add(new PrizeItem("water seed", "seed", undineSeedEventData.ToArray(), "the water seed", 0x90, seedScore));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.WATER_SEED, "seed", undineSeedEventData.ToArray(), "the water seed", 0x90, seedScore));
             }
 
 
@@ -539,7 +539,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 gnomeSeedEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the earth seed"));
-                allPrizes.Add(new PrizeItem("earth seed", "seed", gnomeSeedEventData.ToArray(), "the earth seed", 0x91, seedScore));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.EARTH_SEED, "seed", gnomeSeedEventData.ToArray(), "the earth seed", 0x91, seedScore));
             }
 
 
@@ -566,7 +566,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 sylphidSeedEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the wind seed"));
-                allPrizes.Add(new PrizeItem("wind seed", "seed", sylphidSeedEventData.ToArray(), "the wind seed", 0x92, seedScore));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.WIND_SEED, "seed", sylphidSeedEventData.ToArray(), "the wind seed", 0x92, seedScore));
             }
 
 
@@ -593,7 +593,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 salamandoSeedEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the fire seed"));
-                allPrizes.Add(new PrizeItem("fire seed", "seed", salamandoSeedEventData.ToArray(), "the fire seed", 0x93, seedScore));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.FIRE_SEED, "seed", salamandoSeedEventData.ToArray(), "the fire seed", 0x93, seedScore));
             }
 
 
@@ -620,7 +620,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 luminaSeedEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the light seed"));
-                allPrizes.Add(new PrizeItem("light seed", "seed", luminaSeedEventData.ToArray(), "the light seed", 0x94, seedScore));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.LIGHT_SEED, "seed", luminaSeedEventData.ToArray(), "the light seed", 0x94, seedScore));
             }
 
 
@@ -647,7 +647,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 shadeSeedEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the dark seed"));
-                allPrizes.Add(new PrizeItem("dark seed", "seed", shadeSeedEventData.ToArray(), "the dark seed", 0x95, seedScore));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.DARK_SEED, "seed", shadeSeedEventData.ToArray(), "the dark seed", 0x95, seedScore));
             }
 
 
@@ -674,7 +674,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 lunaSeedEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the moon seed"));
-                allPrizes.Add(new PrizeItem("moon seed", "seed", lunaSeedEventData.ToArray(), "the moon seed", 0x96, seedScore));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.MOON_SEED, "seed", lunaSeedEventData.ToArray(), "the moon seed", 0x96, seedScore));
             }
 
 
@@ -701,7 +701,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 dryadSeedEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the dryad seed"));
-                allPrizes.Add(new PrizeItem("dryad seed", "seed", dryadSeedEventData.ToArray(), "the dryad seed", 0x97, seedScore));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.DRYAD_SEED, "seed", dryadSeedEventData.ToArray(), "the dryad seed", 0x97, seedScore));
             }
 
 
@@ -763,7 +763,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     undineSpellEventData.AddRange(getRandomGiftText(r, prizePrefixes, "Undine magic"));
-                    allPrizes.Add(new PrizeItem("undine spells", "element", undineSpellEventData.ToArray(), "undine magic", EventFlags.ELEMENT_UNDINE_FLAG, 2.0));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.UNDINE_SPELLS, "element", undineSpellEventData.ToArray(), "undine magic", EventFlags.ELEMENT_UNDINE_FLAG, 2.0));
                 }
             }
 
@@ -796,7 +796,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     gnomeSpellEventData.AddRange(getRandomGiftText(r, prizePrefixes, "Gnome magic"));
-                    allPrizes.Add(new PrizeItem("gnome spells", "element", gnomeSpellEventData.ToArray(), "gnome magic", EventFlags.ELEMENT_GNOME_FLAG, 2.0));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.GNOME_SPELLS, "element", gnomeSpellEventData.ToArray(), "gnome magic", EventFlags.ELEMENT_GNOME_FLAG, 2.0));
                 }
             }
 
@@ -829,7 +829,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     sylphidSpellEventData.AddRange(getRandomGiftText(r, prizePrefixes, "Sylphid magic"));
-                    allPrizes.Add(new PrizeItem("sylphid spells", "element", sylphidSpellEventData.ToArray(), "sylphid magic", EventFlags.ELEMENT_SYLPHID_FLAG, 1.5));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.SYLPHID_SPELLS, "element", sylphidSpellEventData.ToArray(), "sylphid magic", EventFlags.ELEMENT_SYLPHID_FLAG, 1.5));
                 }
             }
 
@@ -862,7 +862,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     salamandoSpellEventData.AddRange(getRandomGiftText(r, prizePrefixes, "Salamando magic"));
-                    allPrizes.Add(new PrizeItem("salamando spells", "element", salamandoSpellEventData.ToArray(), "salamando magic", EventFlags.ELEMENT_SALAMANDO_FLAG, 1.5));
+                    allPrizes.Add(new PrizeItem( OpenWorldPrizeNames.SALAMANDO_SPELLS, "element", salamandoSpellEventData.ToArray(), "salamando magic", EventFlags.ELEMENT_SALAMANDO_FLAG, 1.5));
                 }
             }
 
@@ -898,7 +898,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     luminaSpellEventData.AddRange(getRandomGiftText(r, prizePrefixes, "Lumina magic"));
-                    allPrizes.Add(new PrizeItem("lumina spells", "element", luminaSpellEventData.ToArray(), "lumina magic", EventFlags.ELEMENT_LUMINA_FLAG, 2.0));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.LUMINA_SPELLS, "element", luminaSpellEventData.ToArray(), "lumina magic", EventFlags.ELEMENT_LUMINA_FLAG, 2.0));
                 }
             }
 
@@ -934,7 +934,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     shadeSpellEventData.AddRange(getRandomGiftText(r, prizePrefixes, "Shade magic"));
-                    allPrizes.Add(new PrizeItem("shade spells", "element", shadeSpellEventData.ToArray(), "shade magic", EventFlags.ELEMENT_SHADE_FLAG, 1.5));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.SHADE_SPELLS, "element", shadeSpellEventData.ToArray(), "shade magic", EventFlags.ELEMENT_SHADE_FLAG, 1.5));
                 }
             }
 
@@ -967,7 +967,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     lunaSpellEventData.AddRange(getRandomGiftText(r, prizePrefixes, "Luna magic"));
-                    allPrizes.Add(new PrizeItem("luna spells", "element", lunaSpellEventData.ToArray(), "luna magic", EventFlags.ELEMENT_LUNA_FLAG, 2.0));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.LUNA_SPELLS, "element", lunaSpellEventData.ToArray(), "luna magic", EventFlags.ELEMENT_LUNA_FLAG, 2.0));
                 }
             }
 
@@ -1013,7 +1013,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 else
                 {
                     dryadSpellEventData.AddRange(getRandomGiftText(r, prizePrefixes, "Dryad magic"));
-                    allPrizes.Add(new PrizeItem("dryad spells", "element", dryadSpellEventData.ToArray(), "dryad magic", EventFlags.ELEMENT_DRYAD_FLAG, 1.5));
+                    allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.DRYAD_SPELLS, "element", dryadSpellEventData.ToArray(), "dryad magic", EventFlags.ELEMENT_DRYAD_FLAG, 1.5));
                 }
             }
 
@@ -1037,7 +1037,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 towerKeyEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Gold Key"));
-                allPrizes.Add(new PrizeItem("gold tower key", "item", towerKeyEventData.ToArray(), "the tower key", 0x37, 1.0));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.GOLD_TOWER_KEY, "item", towerKeyEventData.ToArray(), "the tower key", 0x37, 1.0));
             }
 
 
@@ -1060,7 +1060,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 seaHareTailEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Sea Hare Tail"));
-                allPrizes.Add(new PrizeItem("sea hare tail", "item", seaHareTailEventData.ToArray(), "the sea hare's tail", 0x29, 1.0));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.SEA_HARE_TAIL, "item", seaHareTailEventData.ToArray(), "the sea hare's tail", 0x29, 1.0));
             }
 
 
@@ -1085,7 +1085,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 moogleBeltEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Moogle Belt"));
-                allPrizes.Add(new PrizeItem("moogle belt", "item", moogleBeltEventData.ToArray(), "the moogle belt", EventFlags.OPENWORLD_MOOGLE_BELT_FLAG, 0.8));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.MOOGLE_BELT, "item", moogleBeltEventData.ToArray(), "the moogle belt", EventFlags.OPENWORLD_MOOGLE_BELT_FLAG, 0.8));
             }
 
 
@@ -1110,7 +1110,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             else
             {
                 midgeMalletEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Midge Mallet"));
-                allPrizes.Add(new PrizeItem("midge mallet", "item", midgeMalletEventData.ToArray(), "the midge mallet", EventFlags.MIDGE_MALLET_FLAG, 0.8));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.MIDGE_MALLET, "item", midgeMalletEventData.ToArray(), "the midge mallet", EventFlags.MIDGE_MALLET_FLAG, 0.8));
             }
 
             List<byte> goldEventFlags = new List<byte>(EventFlags.OPENWORLD_GOLD_FLAGS);
@@ -1134,7 +1134,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 flammieDrumEventData.Add(0x1E);
                 flammieDrumEventData.Add(0x47); // add flammie drum
                 flammieDrumEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Flammie Drum"));
-                allPrizes.Add(new PrizeItem("flammie drum", "item", flammieDrumEventData.ToArray(), "the flammie drum", flammieDrumFlag, 4.0));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.FLAMMIE_DRUM, "item", flammieDrumEventData.ToArray(), "the flammie drum", flammieDrumFlag, 4.0));
             }
 
 
@@ -1165,7 +1165,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 boyEventData.Add(0x44); // full heal, presumably
                 boyEventData.Add(EventCommandEnum.OPEN_DIALOGUE.Value);
                 boyEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Boy, " + VanillaEventUtil.BOY_NAME_INDICATOR));
-                allPrizes.Add(new PrizeItem("boy", "item", boyEventData.ToArray(), "the boy", 0x0C, 3.5));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.BOY, "item", boyEventData.ToArray(), "the boy", 0x0C, 3.5));
             }
 
 
@@ -1196,7 +1196,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 girlEventData.Add(0x44); // full heal, presumably
                 girlEventData.Add(EventCommandEnum.OPEN_DIALOGUE.Value);
                 girlEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Girl, " + VanillaEventUtil.GIRL_NAME_INDICATOR));
-                allPrizes.Add(new PrizeItem("girl", "item", girlEventData.ToArray(), "the girl", 0x0D, 3.5));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.GIRL, "item", girlEventData.ToArray(), "the girl", 0x0D, 3.5));
             }
 
 
@@ -1226,7 +1226,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                 spriteEventData.Add(0x44); // full heal, presumably
                 spriteEventData.Add(EventCommandEnum.OPEN_DIALOGUE.Value);
                 spriteEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the Sprite, " + VanillaEventUtil.SPRITE_NAME_INDICATOR));
-                allPrizes.Add(new PrizeItem("sprite", "item", spriteEventData.ToArray(), "the sprite", 0x0E, 3.5));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.SPRITE, "item", spriteEventData.ToArray(), "the sprite", 0x0E, 3.5));
             }
             
             List<PrizeLocation> filteredLocations = goal == OpenWorldGoalProcessor.GOAL_GIFTMODE ? GiftModeProcessing.processLocations(settings, context, allLocations, allPrizes) : allLocations;
@@ -1382,7 +1382,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                     string nothingPhrase = nothingPhrases[r.Next() % nothingPhrases.Length];
                     nothingEventData.AddRange(VanillaEventUtil.getBytes(nothingPhrase));
                 }
-                allPrizes.Add(new PrizeItem("nothing", "", nothingEventData.ToArray(), "nothing", 0x00, 0.1));
+                allPrizes.Add(new PrizeItem(OpenWorldPrizeNames.NOTHING, "", nothingEventData.ToArray(), OpenWorldPrizeNames.NOTHING, 0x00, 0.1));
             }
 
             return allPrizes;
@@ -1400,5 +1400,274 @@ namespace SoMRandomizer.processing.openworld.randomization
             return VanillaEventUtil.getBytes(VanillaEventUtil.wordWrapText(format));
         }
 
+        public static List<Item> getAllItems()
+        {
+            var items = new List<Item>
+            {
+                new Item
+                {
+                    name = "Glove",
+                    internal_name = OpenWorldPrizeNames.GLOVE
+                },
+                new Item
+                {
+                    name = "Sword",
+                    internal_name = OpenWorldPrizeNames.SWORD
+                },
+                new Item
+                {
+                    name = "Axe",
+                    internal_name = OpenWorldPrizeNames.AXE
+                },
+                new Item
+                {
+                    name = "Spear",
+                    internal_name = OpenWorldPrizeNames.SPEAR
+                },
+                new Item
+                {
+                    name = "Whip",
+                    internal_name = OpenWorldPrizeNames.WHIP
+                },
+                new Item
+                {
+                    name = "Bow",
+                    internal_name = OpenWorldPrizeNames.BOW
+                },
+                new Item
+                {
+                    name = "Boomerang",
+                    internal_name = OpenWorldPrizeNames.BOOMERANG
+                },
+                new Item
+                {
+                    name = "Javelin",
+                    internal_name = OpenWorldPrizeNames.JAVELIN
+                },
+                new Item
+                {
+                    name = "Water Seed",
+                    internal_name = OpenWorldPrizeNames.WATER_SEED
+                },
+                new Item
+                {
+                    name = "Earth Seed",
+                    internal_name = OpenWorldPrizeNames.EARTH_SEED
+                },
+                new Item
+                {
+                    name = "Wind Seed",
+                    internal_name = OpenWorldPrizeNames.WIND_SEED
+                },
+                new Item
+                {
+                    name = "Fire Seed",
+                    internal_name = OpenWorldPrizeNames.FIRE_SEED
+                },
+                new Item
+                {
+                    name = "Light Seed",
+                    internal_name = OpenWorldPrizeNames.LIGHT_SEED
+                },
+                new Item
+                {
+                    name = "Dark Seed",
+                    internal_name = OpenWorldPrizeNames.DARK_SEED
+                },
+                new Item
+                {
+                    name = "Moon Seed",
+                    internal_name = OpenWorldPrizeNames.MOON_SEED
+                },
+                new Item
+                {
+                    name = "Tree Seed",
+                    internal_name = OpenWorldPrizeNames.DRYAD_SEED
+                },
+                new Item
+                {
+                    name = "Undine Spells",
+                    internal_name = OpenWorldPrizeNames.UNDINE_SPELLS
+                },
+                new Item
+                {
+                    name = "Gnome Spells",
+                    internal_name = OpenWorldPrizeNames.GNOME_SPELLS
+                },
+                new Item
+                {
+                    name = "Sylphid Spells",
+                    internal_name = OpenWorldPrizeNames.SYLPHID_SPELLS
+                },
+                new Item
+                {
+                    name = "Salamando Spells",
+                    internal_name = OpenWorldPrizeNames.SALAMANDO_SPELLS
+                },
+                new Item
+                {
+                    name = "Lumina Spells",
+                    internal_name = OpenWorldPrizeNames.LUMINA_SPELLS
+                },
+                new Item
+                {
+                    name = "Shade Spells",
+                    internal_name = OpenWorldPrizeNames.SHADE_SPELLS
+                },
+                new Item
+                {
+                    name = "Luna Spells",
+                    internal_name = OpenWorldPrizeNames.LUNA_SPELLS
+                },
+                new Item
+                {
+                    name = "Dryad Spells",
+                    internal_name = OpenWorldPrizeNames.DRYAD_SPELLS
+                },
+                new Item
+                {
+                    name = "Gold Tower Key",
+                    internal_name = OpenWorldPrizeNames.GOLD_TOWER_KEY
+                },
+                new Item
+                {
+                    name = "Sea Hare Tail",
+                    internal_name = OpenWorldPrizeNames.SEA_HARE_TAIL
+                },
+                new Item
+                {
+                    name = "Moogle Belt",
+                    internal_name = OpenWorldPrizeNames.MOOGLE_BELT
+                },
+                new Item
+                {
+                    name = "Midge Mallet",
+                    internal_name = OpenWorldPrizeNames.MIDGE_MALLET
+                },
+                new Item
+                {
+                    name = "Flammie Drum",
+                    internal_name = OpenWorldPrizeNames.FLAMMIE_DRUM
+                },
+                new Item
+                {
+                    name = "Boy",
+                    internal_name = OpenWorldPrizeNames.BOY
+                },
+                new Item
+                {
+                    name = "Girl",
+                    internal_name = OpenWorldPrizeNames.GIRL
+                },
+                new Item
+                {
+                    name = "Sprite",
+                    internal_name = OpenWorldPrizeNames.SPRITE
+                },
+                new Item
+                {
+                    name = "100 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "200 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "300 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "400 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "500 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "600 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "700 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "800 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "900 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "1000 GP",
+                    internal_name = null
+                },
+                new Item
+                {
+                    name = "Glove Orb", //glorb
+                    internal_name = OpenWorldPrizeNames.GLOVE_ORB
+                },
+                new Item
+                {
+                    name = "Sword Orb",
+                    internal_name = OpenWorldPrizeNames.SWORD_ORB
+                },
+                new Item
+                {
+                    name = "Axe Orb",
+                    internal_name = OpenWorldPrizeNames.AXE_ORB
+                },
+                new Item
+                {
+                    name = "Spear Orb",
+                    internal_name = OpenWorldPrizeNames.SPEAR_ORB
+                },
+                new Item
+                {
+                    name = "Whip Orb",
+                    internal_name = OpenWorldPrizeNames.WHIP_ORB
+                },
+                new Item
+                {
+                    name = "Bow Orb",
+                    internal_name = OpenWorldPrizeNames.BOW_ORB
+                },
+                new Item
+                {
+                    name = "Boomerang Orb",
+                    internal_name = OpenWorldPrizeNames.BOOMERANG_ORB
+                },
+                new Item
+                {
+                    name = "Javelin Orb",
+                    internal_name = OpenWorldPrizeNames.JAVELIN_ORB
+                },
+                new Item
+                {
+                    name = "Nothing",
+                    internal_name = OpenWorldPrizeNames.NOTHING
+                },
+            };
+            const long base_id = 0;
+            for (int i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                item.id = i + base_id;
+                items[i] = item;
+            }
+            return items;
+        }
     }
 }

@@ -4,6 +4,7 @@ using SoMRandomizer.processing.common;
 using SoMRandomizer.util;
 using System.Collections.Generic;
 using System.Linq;
+using SoMRandomizer.native;
 using static SoMRandomizer.processing.common.SomVanillaValues;
 namespace SoMRandomizer.processing.openworld.randomization
 {
@@ -378,6 +379,86 @@ namespace SoMRandomizer.processing.openworld.randomization
             }
 
             Logging.log("Grand palace dependencies: " + DataUtil.ListToString(grandPalaceBossDependencies), "debug");
+        }
+
+        public static List<Location> getAllLocations()
+        {
+            var list = new List<Location>
+            {
+                new Location
+                {
+                    name = "Mech Rider 3",
+                    internal_name = "mech rider 3 (new item)",
+                },
+                new Location
+                {
+                    name = "Buffy",
+                    internal_name = "buffy (new item)",
+                },
+                new Location
+                {
+                    name = "Dread Slime",
+                    internal_name = "dread slime (new item)",
+                },
+                new Location
+                {
+                    name = "Gnome Spells",
+                    internal_name = "gnome item 1 (spells)",
+                },
+                new Location
+                {
+                    name = "Gnome Seed",
+                    internal_name = "gnome item 2 (seed)",
+                },
+                new Location
+                {
+                    name = "Fire Seed",
+                    internal_name = "fire seed",
+                },
+                new Location
+                {
+                    name = "Luna Spells",
+                    internal_name = "luna item 1 (spells)",
+                },
+                new Location
+                {
+                    name = "Luna Seed",
+                    internal_name = "luna item 2 (seed)",
+                },
+                new Location
+                {
+                    name = "Moogle Belt",
+                    internal_name = "kakkara (moogle belt)",
+                },
+                new Location
+                {
+                    name = "Lumina Spells",
+                    internal_name = "lumina spells",
+                },
+                new Location
+                {
+                    name = "Lumina Seed",
+                    internal_name = "lumina seed",
+                },
+                new Location
+                {
+                    name = "Elinee's Castle Chest 1",
+                    internal_name = "chest next to whip chest",
+                },
+                new Location
+                {
+                    name = "Palace of Darkness Chest behind bars",
+                    internal_name = "shade palace glove orb chest",
+                },
+            };
+            const long baseId = 0;
+            for (var i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                item.id = i + baseId;
+                list[i] = item;
+            }
+            return list;
         }
     }
 }
