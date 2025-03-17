@@ -2,6 +2,11 @@
 .idea
 *.DotSettings.user
 packages/
+.vs
+*.user
+*.pyc
+*.sfc
+.editorconfig
 
 # build output
 bin/

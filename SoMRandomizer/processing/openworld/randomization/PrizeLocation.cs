@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using SoMRandomizer.native;
+using System;
+using System.Collections.Generic;
+using System.IO.Pipes;
 
 namespace SoMRandomizer.processing.openworld.randomization
 {
@@ -7,8 +10,8 @@ namespace SoMRandomizer.processing.openworld.randomization
     /// </summary>
     /// 
     /// <remarks>Author: Moppleton</remarks>
-    public class PrizeLocation
-    {
+    public class PrizeLocation : ISerializableObject
+	{
         // name of the location - these are unique
         public string locationName;
         // map number
@@ -50,6 +53,22 @@ namespace SoMRandomizer.processing.openworld.randomization
         {
             // no hints constructor for starting stuff
         }
+
+		public Dictionary<string, object> toDict()
+		{
+			Dictionary<string, object> outDict = new Dictionary<string, object> { };
+			outDict.Add("locationName", locationName);
+			outDict.Add("mapNum", mapNum);
+			outDict.Add("objNum", objNum);
+			outDict.Add("eventNum", eventNum);
+			outDict.Add("eventReplacementIndex", eventReplacementIndex);
+			outDict.Add("prizeTypeOptions", prizeTypeOptions);
+			outDict.Add("locationHints", locationHints);
+			outDict.Add("lockedByPrizes", lockedByPrizes);
+			outDict.Add("reachability", reachability);
+
+			return outDict;
+		}
 
         public string[] getLockedByPrizes(bool flammieDrumInLogic, string _upperLandElement, string goal)
         {
