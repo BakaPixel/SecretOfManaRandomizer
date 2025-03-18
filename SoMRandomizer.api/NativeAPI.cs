@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using SoMRandomizer.native;
 using SoMRandomizer.processing.openworld.randomization;
 using SoMRandomizer.processing.openworld;
-using System.Text;
 using SoMRandomizer.config.settings;
 using SoMRandomizer.processing.common;
 using Newtonsoft.Json.Linq;
-using SoMRandomizer.processing.hacks.openworld;
 
 namespace SoMRandomizer.api;
 
@@ -92,6 +89,7 @@ public static class NativeAPI
 
 		Dictionary<string, object> dict = JObject.Parse(marshaled).ToObject<Dictionary<string, object>>();
 		Dictionary<string, string> entries = (dict["entries"] as JObject).ToObject<Dictionary<string, string>>();
+		string seed = dict["seed"] as string;
 
 		// create default settings and apply our overrides
 		CommonSettings commonSettings = new CommonSettings();
@@ -103,10 +101,13 @@ public static class NativeAPI
 		commonSettings.set(CommonSettings.PROPERTYNAME_VERSION, RomGenerator.VERSION_NUMBER);
 
 		openWorldSettings.processNewSettings(entries);
-		RandoContext rc = new RandoContext();
-		StartingWeaponRandomizer.setStartingWeapons(openWorldSettings, rc);
-		List<PrizeLocation> lpl = OpenWorldLocations.getForSelectedOptions(openWorldSettings, rc);
-		List<PrizeItem> lpi = OpenWorldPrizes.getForSelectedOptions(openWorldSettings, rc, lpl);
+		RandoContext context = new RandoContext();
+		RomGenerator.initGenerate(seed, openWorldSettings, context);
+		StartingWeaponRandomizer.setStartingWeapons(openWorldSettings, context);
+		OpenWorldCharacterSelection.setStartingCharacter(seed, openWorldSettings, context);
+		List<PrizeLocation> lpl = OpenWorldLocations.getForSelectedOptions(openWorldSettings, context);
+		List<PrizeItem> lpi = OpenWorldPrizes.getForSelectedOptions(openWorldSettings, context, lpl);
+
 		var dictOut = NativeHelpers.dataToDict(lpi);
 
 		return NativeHelpers.ObjectToIntPtr(dictOut);

@@ -1,4 +1,7 @@
 ﻿
+using SoMRandomizer.native;
+using System.Collections.Generic;
+
 namespace SoMRandomizer.processing.openworld.randomization
 {
     /// <summary>
@@ -6,7 +9,7 @@ namespace SoMRandomizer.processing.openworld.randomization
     /// </summary>
     /// 
     /// <remarks>Author: Moppleton</remarks>
-    public class PrizeItem
+    public class PrizeItem : ISerializableObject
     {
         // this is so i can stick them in dictionaries and not rely on them all to have unique names, because they do not
         private static int PRIZE_UID = 0;
@@ -33,6 +36,22 @@ namespace SoMRandomizer.processing.openworld.randomization
             value = prizeValue;
             uid = PRIZE_UID++;
         }
+
+
+		public Dictionary<string, object> toDict()
+		{
+			Dictionary<string, object> outDict = new Dictionary<string, object> { };
+			outDict.Add("PRIZE_UID", PRIZE_UID);
+			outDict.Add("prizeName", prizeName);
+			outDict.Add("prizeType", prizeType);
+			outDict.Add("eventData", eventData);
+			outDict.Add("hintName", hintName);
+			outDict.Add("gotItemEventFlag", gotItemEventFlag);
+			outDict.Add("value", value);
+			outDict.Add("uid", uid);
+
+			return outDict;
+		}
 
         public override bool Equals(object obj)
         {

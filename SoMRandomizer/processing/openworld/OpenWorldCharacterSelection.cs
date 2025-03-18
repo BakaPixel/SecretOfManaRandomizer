@@ -31,7 +31,19 @@ namespace SoMRandomizer.processing.openworld
             return "Open world character selection";
         }
 
-        protected override bool process(byte[] origRom, byte[] outRom, string seed, RandoSettings settings, RandoContext context)
+		protected override bool process(byte[] origRom, byte[] outRom, string seed, RandoSettings settings, RandoContext context)
+		{
+			var out_bool = setStartingCharacter(seed, settings, context);
+			StringValueSettings working = context.workingData;
+			var startingChar = working.get(STARTING_CHARACTER);
+			if (startingChar != "boy")
+			{
+				new StartingCharacterRandomizer().add(origRom, outRom, seed, settings, context);
+			}
+			return true && out_bool;
+		}
+
+        public static bool setStartingCharacter(string seed, RandoSettings settings, RandoContext context)
         {
             Random r = context.randomFunctional;
             StringValueSettings working = context.workingData;
@@ -52,9 +64,9 @@ namespace SoMRandomizer.processing.openworld
                         startingChar = "sprite";
                         break;
                 }
-            }
+			}
 
-            bool boyInLogic = false;
+			bool boyInLogic = false;
             bool girlInLogic = true;
             bool spriteInLogic = true;
             bool startSolo = true;
@@ -262,11 +274,6 @@ namespace SoMRandomizer.processing.openworld
             working.setBool(SPRITE_EXISTS, spriteExists);
             working.setBool(START_SOLO, startSolo);
             working.setBool(FOUND_CHARS_GET_YOUR_LEVEL, foundCharactersGetYourLevel);
-
-            if (startingChar != "boy")
-            {
-                new StartingCharacterRandomizer().add(origRom, outRom, seed, settings, context);
-            }
 
             return true;
         }

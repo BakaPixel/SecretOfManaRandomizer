@@ -10,7 +10,7 @@ namespace SoMRandomizer.api
 {
     public static class NativeHelpers
     {
-		public static unsafe Dictionary<string, object> dataToDict<T>(List<T> inputData)
+		public static unsafe Dictionary<string, object> dataToDict<T>(List<T> inputData) where T : ISerializableObject
 		{
 			Dictionary<string, object> dictOut = new Dictionary<string, object> { };
 			dictOut.Add("list", new List<Dictionary<string, object>>());

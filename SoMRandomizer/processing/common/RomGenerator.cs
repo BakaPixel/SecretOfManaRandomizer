@@ -287,16 +287,24 @@ namespace SoMRandomizer.processing.common
             commonSettings.setInt(CommonSettings.PROPERTYNAME_CURRENT_PROGRESS, 0);
         }
 
+		public static void initGenerate(String seed, RandoSettings settings, RandoContext context)
+		{
+			// Generalized Init for use in NativeApi
+			// https://github.com/dotnet/coreclr/blob/release/1.1.0/src/mscorlib/src/System/Random.cs/
+			// https://github.com/mono/mono/blob/master/mcs/class/Mono.C5/C5/Random.cs
+			context.randomFunctional = new DotNet110Random(HashcodeUtil.GetDeterministicHashCode(seed));
+			// different random for cosmetics, so you can change them and not impact the rando
+			context.randomCosmetic = new DotNet110Random(HashcodeUtil.GetDeterministicHashCode(seed + "_cosmetic"));
+		}
+
         public bool generate(byte[] origRom, byte[] outRom, String seed, RandoSettings settings)
         {
             RandoContext context = new RandoContext();
             string mode = settings.get(CommonSettings.PROPERTYNAME_MODE);
 
-            // https://github.com/dotnet/coreclr/blob/release/1.1.0/src/mscorlib/src/System/Random.cs/
-            // https://github.com/mono/mono/blob/master/mcs/class/Mono.C5/C5/Random.cs
-            context.randomFunctional = new DotNet110Random(HashcodeUtil.GetDeterministicHashCode(seed));
-            // different random for cosmetics, so you can change them and not impact the rando
-            context.randomCosmetic = new DotNet110Random(HashcodeUtil.GetDeterministicHashCode(seed + "_cosmetic"));
+			// Generalized Init Random Inits
+			initGenerate(seed, settings, context);
+
             context.namesOfThings = new NamesOfThings(outRom);
 
             context.originalRom = origRom;

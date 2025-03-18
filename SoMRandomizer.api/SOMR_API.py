@@ -91,11 +91,16 @@ class SOMR_API:
 
     def __del__(self):
         # Garbage Collection Helper to free memory from DLL Automatically as Object is cleaned up.
+        clear_count = 0
+        ptr_count = len(self.csharp_ptrs)
         if len(self.csharp_ptrs) > 0:
             for ptr in self.csharp_ptrs:
                 if ptr:
-                    print(self._free_memory(ptr))
-            print("Clear Mem Done")
+                    clear_count += self._free_memory(ptr)
+            if ptr_count == clear_count:
+                print("Clear Mem Done")
+            else:
+                raise MemoryError(f"{ptr_count} pointers found, only cleared {clear_count}")
 
     def _func_declare(
         self, name: str, argtypes: list[ctypes.POINTER] | None = None, restype: ctypes._SimpleCData | None = None
@@ -121,10 +126,10 @@ class SOMR_API:
     def _free_memory(self, ptr: ctypes.pointer) -> int:
         return self.dll_free_ptr_memory(ptr)
 
-    def _get_data(self, char_ptr: ctypes.c_void_p) -> dict[str, Any]:
+    def _get_data_from_ptr(self, char_ptr: ctypes.c_void_p) -> dict[str, Any]:
         self.csharp_ptrs.append(char_ptr)
-        out_str = ctypes.cast(char_ptr, ctypes.c_char_p).value.decode()
-        out_dict = json.loads(out_str)
+        temp_str = ctypes.cast(char_ptr, ctypes.c_char_p).value.decode()
+        out_dict = json.loads(temp_str)
         return out_dict
     
     def _str_to_ptr(self, input:str) -> int:
@@ -137,13 +142,13 @@ class SOMR_API:
         to_string = json.dumps(config)
         ptr = self._str_to_ptr(to_string)
         data_ptr = self.dll_get_setting_locations(ptr)
-        return self._get_data(data_ptr)
+        return self._get_data_from_ptr(data_ptr)
 
     def get_setting_items(self, config: dict[str, Any]) -> dict[str, Any]:
         to_string = json.dumps(config)
         ptr = self._str_to_ptr(to_string)
         data_ptr = self.dll_get_setting_items(ptr)
-        return self._get_data(data_ptr)
+        return self._get_data_from_ptr(data_ptr)
 
     def generate_rom(self, config: dict[str, Any]) -> int:
         to_string = json.dumps(config)
@@ -152,11 +157,11 @@ class SOMR_API:
 
     def get_items(self) -> dict[str, Any]:
         data_ptr = self.dll_get_items()
-        return self._get_data(data_ptr)
+        return self._get_data_from_ptr(data_ptr)
 
     def get_locations(self) -> dict[str, Any]:
         data_ptr = self.dll_get_locations()
-        return self._get_data(data_ptr)
+        return self._get_data_from_ptr(data_ptr)
 
     # def get_settings(self) -> list[Setting]:
     #     return self.dll_get_settings()
