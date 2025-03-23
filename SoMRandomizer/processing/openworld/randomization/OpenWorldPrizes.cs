@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using SoMRandomizer.native;
 using static SoMRandomizer.processing.openworld.PlandoProperties;
+using static SoMRandomizer.util.DataUtil;
+using SoMRandomizer.processing.hacks.common.other;
 
 namespace SoMRandomizer.processing.openworld.randomization
 {
@@ -1402,264 +1404,516 @@ namespace SoMRandomizer.processing.openworld.randomization
 
         public static List<Item> getAllItems()
         {
-            var items = new List<Item>
-            {
-                new Item
-                {
-                    name = "Glove",
-                    internal_name = OpenWorldPrizeNames.GLOVE
-                },
-                new Item
-                {
-                    name = "Sword",
-                    internal_name = OpenWorldPrizeNames.SWORD
-                },
-                new Item
-                {
-                    name = "Axe",
-                    internal_name = OpenWorldPrizeNames.AXE
-                },
-                new Item
-                {
-                    name = "Spear",
-                    internal_name = OpenWorldPrizeNames.SPEAR
-                },
-                new Item
-                {
-                    name = "Whip",
-                    internal_name = OpenWorldPrizeNames.WHIP
-                },
-                new Item
-                {
-                    name = "Bow",
-                    internal_name = OpenWorldPrizeNames.BOW
-                },
-                new Item
-                {
-                    name = "Boomerang",
-                    internal_name = OpenWorldPrizeNames.BOOMERANG
-                },
-                new Item
-                {
-                    name = "Javelin",
-                    internal_name = OpenWorldPrizeNames.JAVELIN
-                },
-                new Item
-                {
-                    name = "Water Seed",
-                    internal_name = OpenWorldPrizeNames.WATER_SEED
-                },
-                new Item
-                {
-                    name = "Earth Seed",
-                    internal_name = OpenWorldPrizeNames.EARTH_SEED
-                },
-                new Item
-                {
-                    name = "Wind Seed",
-                    internal_name = OpenWorldPrizeNames.WIND_SEED
-                },
-                new Item
-                {
-                    name = "Fire Seed",
-                    internal_name = OpenWorldPrizeNames.FIRE_SEED
-                },
-                new Item
-                {
-                    name = "Light Seed",
-                    internal_name = OpenWorldPrizeNames.LIGHT_SEED
-                },
-                new Item
-                {
-                    name = "Dark Seed",
-                    internal_name = OpenWorldPrizeNames.DARK_SEED
-                },
-                new Item
-                {
-                    name = "Moon Seed",
-                    internal_name = OpenWorldPrizeNames.MOON_SEED
-                },
-                new Item
-                {
-                    name = "Tree Seed",
-                    internal_name = OpenWorldPrizeNames.DRYAD_SEED
-                },
-                new Item
-                {
-                    name = "Undine Spells",
-                    internal_name = OpenWorldPrizeNames.UNDINE_SPELLS
-                },
-                new Item
-                {
-                    name = "Gnome Spells",
-                    internal_name = OpenWorldPrizeNames.GNOME_SPELLS
-                },
-                new Item
-                {
-                    name = "Sylphid Spells",
-                    internal_name = OpenWorldPrizeNames.SYLPHID_SPELLS
-                },
-                new Item
-                {
-                    name = "Salamando Spells",
-                    internal_name = OpenWorldPrizeNames.SALAMANDO_SPELLS
-                },
-                new Item
-                {
-                    name = "Lumina Spells",
-                    internal_name = OpenWorldPrizeNames.LUMINA_SPELLS
-                },
-                new Item
-                {
-                    name = "Shade Spells",
-                    internal_name = OpenWorldPrizeNames.SHADE_SPELLS
-                },
-                new Item
-                {
-                    name = "Luna Spells",
-                    internal_name = OpenWorldPrizeNames.LUNA_SPELLS
-                },
-                new Item
-                {
-                    name = "Dryad Spells",
-                    internal_name = OpenWorldPrizeNames.DRYAD_SPELLS
-                },
-                new Item
-                {
-                    name = "Gold Tower Key",
-                    internal_name = OpenWorldPrizeNames.GOLD_TOWER_KEY
-                },
-                new Item
-                {
-                    name = "Sea Hare Tail",
-                    internal_name = OpenWorldPrizeNames.SEA_HARE_TAIL
-                },
-                new Item
-                {
-                    name = "Moogle Belt",
-                    internal_name = OpenWorldPrizeNames.MOOGLE_BELT
-                },
-                new Item
-                {
-                    name = "Midge Mallet",
-                    internal_name = OpenWorldPrizeNames.MIDGE_MALLET
-                },
-                new Item
-                {
-                    name = "Flammie Drum",
-                    internal_name = OpenWorldPrizeNames.FLAMMIE_DRUM
-                },
-                new Item
-                {
-                    name = "Boy",
-                    internal_name = OpenWorldPrizeNames.BOY
-                },
-                new Item
-                {
-                    name = "Girl",
-                    internal_name = OpenWorldPrizeNames.GIRL
-                },
-                new Item
-                {
-                    name = "Sprite",
-                    internal_name = OpenWorldPrizeNames.SPRITE
-                },
-                new Item
-                {
-                    name = "100 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "200 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "300 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "400 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "500 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "600 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "700 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "800 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "900 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "1000 GP",
-                    internal_name = null
-                },
-                new Item
-                {
-                    name = "Glove Orb", //glorb
-                    internal_name = OpenWorldPrizeNames.GLOVE_ORB
-                },
-                new Item
-                {
-                    name = "Sword Orb",
-                    internal_name = OpenWorldPrizeNames.SWORD_ORB
-                },
-                new Item
-                {
-                    name = "Axe Orb",
-                    internal_name = OpenWorldPrizeNames.AXE_ORB
-                },
-                new Item
-                {
-                    name = "Spear Orb",
-                    internal_name = OpenWorldPrizeNames.SPEAR_ORB
-                },
-                new Item
-                {
-                    name = "Whip Orb",
-                    internal_name = OpenWorldPrizeNames.WHIP_ORB
-                },
-                new Item
-                {
-                    name = "Bow Orb",
-                    internal_name = OpenWorldPrizeNames.BOW_ORB
-                },
-                new Item
-                {
-                    name = "Boomerang Orb",
-                    internal_name = OpenWorldPrizeNames.BOOMERANG_ORB
-                },
-                new Item
-                {
-                    name = "Javelin Orb",
-                    internal_name = OpenWorldPrizeNames.JAVELIN_ORB
-                },
-                new Item
-                {
-                    name = "Nothing",
-                    internal_name = OpenWorldPrizeNames.NOTHING
-                },
-            };
+			var items = new List<Item>
+			{
+				#region Weapons
+				new Item
+				{
+					name = "Glove",
+					internal_name = OpenWorldPrizeNames.GLOVE,
+					type = (int)ItemType.WEAPON,
+					progression = false,
+					useful = true,
+				},
+				new Item
+				{
+					name = "Sword",
+					internal_name = OpenWorldPrizeNames.SWORD,
+					type = (int)ItemType.WEAPON,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="canCutStuff" },
+					},
+				},
+				new Item
+				{
+					name = "Axe",
+					internal_name = OpenWorldPrizeNames.AXE,
+					type = (int)ItemType.WEAPON,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="canCutStuff" },
+						new ProgressionLogic{ Progression="hasAxe" },
+					},
+				},
+				new Item
+				{
+					name = "Spear",
+					internal_name = OpenWorldPrizeNames.SPEAR,
+					type = (int)ItemType.WEAPON,
+					progression = false,
+					useful = true,
+				},
+				new Item
+				{
+					name = "Whip",
+					internal_name = OpenWorldPrizeNames.WHIP,
+					type = (int)ItemType.WEAPON,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasWhip" },
+					},
+				},
+				new Item
+				{
+					name = "Bow",
+					internal_name = OpenWorldPrizeNames.BOW,
+					type = (int)ItemType.WEAPON,
+					progression = false,
+					useful = true,
+				},
+				new Item
+				{
+					name = "Boomerang",
+					internal_name = OpenWorldPrizeNames.BOOMERANG,
+					type = (int)ItemType.WEAPON,
+					progression = false,
+					useful = true,
+				},
+				new Item
+				{
+					name = "Javelin",
+					internal_name = OpenWorldPrizeNames.JAVELIN,
+					type = (int)ItemType.WEAPON,
+					progression = false,
+					useful = true,
+				},
+				#endregion
+
+				#region Seeds
+				new Item
+				{
+					name = "Water Seed",
+					internal_name = OpenWorldPrizeNames.WATER_SEED,
+					type = (int)ItemType.SEED,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasWaterSeed" },
+					},
+				},
+				new Item
+				{
+					name = "Earth Seed",
+					internal_name = OpenWorldPrizeNames.EARTH_SEED,
+					type = (int)ItemType.SEED,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasEarthSeed" },
+					},
+				},
+				new Item
+				{
+					name = "Wind Seed",
+					internal_name = OpenWorldPrizeNames.WIND_SEED,
+					type = (int)ItemType.SEED,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasWindSeed" },
+					},
+				},
+				new Item
+				{
+					name = "Fire Seed",
+					internal_name = OpenWorldPrizeNames.FIRE_SEED,
+					type = (int)ItemType.SEED,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasFireSeed" },
+					},
+				},
+				new Item
+				{
+					name = "Light Seed",
+					internal_name = OpenWorldPrizeNames.LIGHT_SEED,
+					type = (int)ItemType.SEED,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasLightSeed" },
+					},
+				},
+				new Item
+				{
+					name = "Dark Seed",
+					internal_name = OpenWorldPrizeNames.DARK_SEED,
+					type = (int)ItemType.SEED,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasDarkSeed" },
+					},
+				},
+				new Item
+				{
+					name = "Moon Seed",
+					internal_name = OpenWorldPrizeNames.MOON_SEED,
+					type = (int)ItemType.SEED,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasMoonSeed" },
+					},
+				},
+				new Item
+				{
+					name = "Tree Seed",
+					internal_name = OpenWorldPrizeNames.DRYAD_SEED,
+					type = (int)ItemType.SEED,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasTreeSeed" },
+					},
+				},
+				#endregion
+
+				#region Spells
+				new Item
+				{
+					name = "Undine",
+					internal_name = OpenWorldPrizeNames.UNDINE_SPELLS,
+					type = (int)ItemType.SPELL,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasUndine" },
+					},
+				},
+				new Item
+				{
+					name = "Gnome",
+					internal_name = OpenWorldPrizeNames.GNOME_SPELLS,
+					type = (int)ItemType.SPELL,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasGnome" },
+					},
+				},
+				new Item
+				{
+					name = "Sylphid",
+					internal_name = OpenWorldPrizeNames.SYLPHID_SPELLS,
+					type = (int)ItemType.SPELL,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasSylphid" },
+					},
+				},
+				new Item
+				{
+					name = "Salamando",
+					internal_name = OpenWorldPrizeNames.SALAMANDO_SPELLS,
+					type = (int)ItemType.SPELL,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasSalamando" },
+					},
+				},
+				new Item
+				{
+					name = "Lumina",
+					internal_name = OpenWorldPrizeNames.LUMINA_SPELLS,
+					type = (int)ItemType.SPELL,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasLumina" },
+					},
+				},
+				new Item
+				{
+					name = "Shade",
+					internal_name = OpenWorldPrizeNames.SHADE_SPELLS,
+					type = (int)ItemType.SPELL,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasShade" },
+					},
+				},
+				new Item
+				{
+					name = "Luna",
+					internal_name = OpenWorldPrizeNames.LUNA_SPELLS,
+					type = (int)ItemType.SPELL,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasLuna" },
+					},
+				},
+				new Item
+				{
+					name = "Dryad",
+					internal_name = OpenWorldPrizeNames.DRYAD_SPELLS,
+					type = (int)ItemType.SPELL,
+					progression = false,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasDryad" },
+					},
+				},
+				#endregion
+
+				#region Key Items
+				new Item
+				{
+					name = "Gold Tower Key",
+					internal_name = OpenWorldPrizeNames.GOLD_TOWER_KEY,
+					type = (int)ItemType.PROGRESSION,
+					progression = true,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasKey" },
+					},
+				},
+				new Item
+				{
+					name = "Sea Hare Tail",
+					internal_name = OpenWorldPrizeNames.SEA_HARE_TAIL,
+					type = (int)ItemType.PROGRESSION,
+					progression = true,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasTail" },
+					},
+				},
+				new Item
+				{
+					name = "Moogle Belt",
+					internal_name = OpenWorldPrizeNames.MOOGLE_BELT,
+					type = (int)ItemType.PROGRESSION,
+					progression = true,
+					useful = true,
+				},
+				new Item
+				{
+					name = "Midge Mallet",
+					internal_name = OpenWorldPrizeNames.MIDGE_MALLET,
+					type = (int)ItemType.PROGRESSION,
+					progression = true,
+					useful = true,
+				},
+				new Item
+				{
+					name = "Flammie Drum",
+					internal_name = OpenWorldPrizeNames.FLAMMIE_DRUM,
+					type = (int)ItemType.PROGRESSION,
+					progression = true,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasDrum" },
+					},
+				},
+				#endregion
+
+				#region Characters
+				new Item
+				{
+					name = "Boy",
+					internal_name = OpenWorldPrizeNames.BOY,
+					type = (int)ItemType.CHARACTER,
+					progression = true,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasBoy" },
+					},
+				},
+				new Item
+				{
+					name = "Girl",
+					internal_name = OpenWorldPrizeNames.GIRL,
+					type = (int)ItemType.CHARACTER,
+					progression = true,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasGirl" },
+					},
+				},
+				new Item
+				{
+					name = "Sprite",
+					internal_name = OpenWorldPrizeNames.SPRITE,
+					type = (int)ItemType.CHARACTER,
+					progression = true,
+					useful = true,
+					provides = {
+						new ProgressionLogic{ Progression="hasSprite" },
+					},
+				},
+				#endregion
+
+				#region Filler
+				new Item
+				{
+					name = "100 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "200 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "300 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "400 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "500 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "600 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "700 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "800 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "900 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "1000 GP",
+					internal_name = null,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				#endregion
+
+				#region Orbs
+				new Item
+				{
+					name = "Glove Orb", //glorb
+                    internal_name = OpenWorldPrizeNames.GLOVE_ORB,
+					type = (int)ItemType.ORB,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "Sword Orb",
+					internal_name = OpenWorldPrizeNames.SWORD_ORB,
+					type = (int)ItemType.ORB,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "Axe Orb",
+					internal_name = OpenWorldPrizeNames.AXE_ORB,
+					type = (int)ItemType.ORB,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "Spear Orb",
+					internal_name = OpenWorldPrizeNames.SPEAR_ORB,
+					type = (int)ItemType.ORB,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "Whip Orb",
+					internal_name = OpenWorldPrizeNames.WHIP_ORB,
+					type = (int)ItemType.ORB,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "Bow Orb",
+					internal_name = OpenWorldPrizeNames.BOW_ORB,
+					type = (int)ItemType.ORB,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "Boomerang Orb",
+					internal_name = OpenWorldPrizeNames.BOOMERANG_ORB,
+					type = (int)ItemType.ORB,
+					progression = false,
+					useful = false,
+				},
+				new Item
+				{
+					name = "Javelin Orb",
+					internal_name = OpenWorldPrizeNames.JAVELIN_ORB,
+					type = (int)ItemType.ORB,
+					progression = false,
+					useful = false,
+				},
+				#endregion
+
+				#region Nothing
+				new Item
+				{
+					name = "Nothing",
+					internal_name = OpenWorldPrizeNames.NOTHING,
+					type = (int)ItemType.FILLER,
+					progression = false,
+					useful = false,
+				},
+				#endregion
+			};
             const long base_id = 0;
             for (int i = 0; i < items.Count; i++)
             {

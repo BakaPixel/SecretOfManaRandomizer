@@ -6,6 +6,7 @@ using SoMRandomizer.processing.hacks.common.other;
 using SoMRandomizer.processing.hacks.common.qol;
 using SoMRandomizer.processing.hacks.common.util;
 using SoMRandomizer.processing.hacks.openworld;
+using SoMRandomizer.processing.openworld.randomization;
 using SoMRandomizer.util.rng;
 using System;
 using System.Collections.Generic;
@@ -290,6 +291,8 @@ namespace SoMRandomizer.processing.common
 		public static void initGenerate(String seed, RandoSettings settings, RandoContext context)
 		{
 			// Generalized Init for use in NativeApi
+			PrizeItem.initUID();
+
 			// https://github.com/dotnet/coreclr/blob/release/1.1.0/src/mscorlib/src/System/Random.cs/
 			// https://github.com/mono/mono/blob/master/mcs/class/Mono.C5/C5/Random.cs
 			context.randomFunctional = new DotNet110Random(HashcodeUtil.GetDeterministicHashCode(seed));

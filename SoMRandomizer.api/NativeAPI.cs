@@ -7,6 +7,7 @@ using SoMRandomizer.processing.openworld;
 using SoMRandomizer.config.settings;
 using SoMRandomizer.processing.common;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace SoMRandomizer.api;
 
@@ -22,7 +23,6 @@ public static class NativeAPI
 		{
 			(dictOut["list"] as List<Dictionary<string, object>>).Add(value.toDict());
 		}
-
 		return NativeHelpers.ObjectToIntPtr(dictOut);
 	}
 
@@ -49,13 +49,24 @@ public static class NativeAPI
 	}
 
 	[UnmanagedCallersOnly(EntryPoint = "somr_receive_item")]
-	public static unsafe void RecItem(IntPtr input)
+	public static unsafe void somr_receive_item(IntPtr input)
 	{
 		// Print the data to verify
 		Item testInput = Marshal.PtrToStructure<Item>(input);
+		Console.WriteLine("Item Received");
 		Console.WriteLine($"Received name: {testInput.name}");
 		Console.WriteLine($"Received internal_name: {testInput.internal_name}");
 		Console.WriteLine($"Received id: {testInput.id}");
+	}
+
+	[UnmanagedCallersOnly(EntryPoint = "somr_receive_location")]
+	public static unsafe void somr_receive_location(IntPtr input)
+	{
+		// Print the data to verify
+		Location testInput = Marshal.PtrToStructure<Location>(input);
+		Console.WriteLine("Location Received");
+		Console.WriteLine($"Received Name: {testInput.Name}");
+		Console.WriteLine($"Received Type: {testInput.Type}");
 	}
 
 	[UnmanagedCallersOnly(EntryPoint = "get_setting_locations")]

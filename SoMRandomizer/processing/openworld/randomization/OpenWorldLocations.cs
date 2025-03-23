@@ -383,81 +383,892 @@ namespace SoMRandomizer.processing.openworld.randomization
 
         public static List<Location> getAllLocations()
         {
-            var list = new List<Location>
-            {
-                new Location
-                {
-                    name = "Mech Rider 3",
-                    internal_name = "mech rider 3 (new item)",
-                },
-                new Location
-                {
-                    name = "Buffy",
-                    internal_name = "buffy (new item)",
-                },
-                new Location
-                {
-                    name = "Dread Slime",
-                    internal_name = "dread slime (new item)",
-                },
-                new Location
-                {
-                    name = "Gnome Spells",
-                    internal_name = "gnome item 1 (spells)",
-                },
-                new Location
-                {
-                    name = "Gnome Seed",
-                    internal_name = "gnome item 2 (seed)",
-                },
-                new Location
-                {
-                    name = "Fire Seed",
-                    internal_name = "fire seed",
-                },
-                new Location
-                {
-                    name = "Luna Spells",
-                    internal_name = "luna item 1 (spells)",
-                },
-                new Location
-                {
-                    name = "Luna Seed",
-                    internal_name = "luna item 2 (seed)",
-                },
-                new Location
-                {
-                    name = "Moogle Belt",
-                    internal_name = "kakkara (moogle belt)",
-                },
-                new Location
-                {
-                    name = "Lumina Spells",
-                    internal_name = "lumina spells",
-                },
-                new Location
-                {
-                    name = "Lumina Seed",
-                    internal_name = "lumina seed",
-                },
-                new Location
-                {
-                    name = "Elinee's Castle Chest 1",
-                    internal_name = "chest next to whip chest",
-                },
-                new Location
-                {
-                    name = "Palace of Darkness Chest behind bars",
-                    internal_name = "shade palace glove orb chest",
-                },
-            };
-            const long baseId = 0;
-            for (var i = 0; i < list.Count; i++)
-            {
-                var item = list[i];
-                item.id = i + baseId;
-                list[i] = item;
-            }
+			var list = new List<Location>
+			{
+				new Location
+				{ 
+					Name = "Early Game",
+					Children = new List<Location>
+					{
+						new Location
+						{
+							Name = "Potos",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Sword Pedestal",
+									Type = (int)LocationType.CHEST,
+									Requires = { new ProgressionLogic { Progression= "canCutStuff" } },
+								},
+								new Location
+								{
+									Name = "Potos Chest",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Mantis Ant",
+									Type = (int)LocationType.BOSS,
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Pandora",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Pandora Castle Girl",
+									Type = (int)LocationType.CHECK,
+								},
+								new Location
+								{
+									Name = "Wall Face",
+									Type = (int)LocationType.BOSS,
+								},
+								new Location
+								{
+									Name = "Pandora Castle Chest - 1",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Pandora Castle Chest - 2",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Pandora Castle Chest - 3",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Pandora Castle Chest - 4",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Pandora Castle Chest - 5",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Pandora Castle Chest - 6",
+									Type = (int)LocationType.CHEST,
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Water Palace",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Water Palace Mana Seed",
+									Type = (int)LocationType.CHEST,
+									Requires = { new ProgressionLogic { Progression= "hasWaterPalaceAccess" } },
+								},
+								new Location
+								{
+									Name = "Jabberwocky",
+									Type = (int)LocationType.BOSS,
+									Requires = { new ProgressionLogic { Progression= "hasWaterPalaceAccess" } },
+								},
+								new Location
+								{
+									Name = "Biting Lizard",
+									Type = (int)LocationType.BOSS,
+								},
+								new Location
+								{
+									Name = "Pole Dart",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Undine Spells",
+									Type = (int)LocationType.CHECK,
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Gaia's Navel",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Gaia's Navel Cave Chest",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Watts",
+									Type = (int)LocationType.CHECK,
+								},
+								new Location
+								{
+									Name = "Dwarf Elder",
+									Type = (int)LocationType.CHECK,
+								},
+								new Location
+								{
+									Name = "Tropicallo",
+									Type = (int)LocationType.BOSS,
+								},
+								new Location
+								{
+									Name = "Character Sprite",
+									Type = (int)LocationType.CHECK,
+								},
+								new Location
+								{
+									Name = "Underground Ship Chest",
+									Type = (int)LocationType.CHEST,
+								},
+								new Location
+								{
+									Name = "Kilroy",
+									Type = (int)LocationType.BOSS,
+								},
+								new Location
+								{
+									Name = "Earth Temple Orb",
+									Type = (int)LocationType.CHECK,
+									Requires = { new ProgressionLogic { Progression= "canDestroyETOrb" } },
+									Provides = { new ProgressionLogic { Progression= "et_orb" } },
+								},
+								new Location
+								{
+									Name = "Fire Gigas",
+									Type = (int)LocationType.BOSS,
+									Requires = {
+										new ProgressionLogic { Progression= "hasWhip" },
+										new ProgressionLogic { Progression= "canDestroyETOrb" },
+										new ProgressionLogic { Progression= "hasEarthPalaceAccess" },
+									},
+								},
+								new Location
+								{
+									Name = "Earth Palace Mana Seed",
+									Type = (int)LocationType.CHECK,
+									Requires = {
+										new ProgressionLogic { Progression= "hasWhip" },
+										new ProgressionLogic { Progression= "canDestroyETOrb" },
+										new ProgressionLogic { Progression= "hasEarthPalaceAccess" },
+									},
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Elinee's Castle",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Spikey Tiger",
+									Type = (int)LocationType.BOSS,
+									Requires = {
+										new ProgressionLogic { Progression= "hasAxe" },
+										new ProgressionLogic { Progression= "hasWhip", LogicGroup = 1 },
+										new ProgressionLogic { Progression= "canCutStuff", LogicGroup = 1 },
+									},
+								},
+								new Location
+								{
+									Name = "Elinee's Castle Reward",
+									Type = (int)LocationType.CHEST,
+									Requires = {
+										new ProgressionLogic { Progression= "hasAxe" },
+										new ProgressionLogic { Progression= "hasWhip", LogicGroup = 1 },
+										new ProgressionLogic { Progression= "canCutStuff", LogicGroup = 1 },
+									},
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Upper Land",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Moogle Village",
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Moogle Village Chest - 1",
+											Type = (int)LocationType.CHEST
+										},
+										new Location
+										{
+											Name = "Moogle Village Chest - 2",
+											Type = (int)LocationType.CHEST
+										},
+									}
+								},
+								new Location
+								{
+									Name = "Sprite Village",
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Spring Beak",
+											Type = (int)LocationType.BOSS,
+											Requires = { new ProgressionLogic { Progression= "hasWindPalaceAccess" } },
+										},
+										new Location
+										{
+											Name = "Wind Palace Reward",
+											Type = (int)LocationType.CHEST,
+											Requires = { new ProgressionLogic { Progression= "hasWindPalaceAccess" } },
+										},
+									}
+								},
+								new Location
+								{
+									Name = "Upper Land Forest",
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Upper Land Forest Orb",
+											Type = (int)LocationType.CHECK,
+											Requires = { new ProgressionLogic { Progression = "canDestroyUFOrb" } },
+											Provides = { new ProgressionLogic { Progression = "uf_orb" } }
+										},
+									}
+								},
+								new Location
+								{
+									Name = "Matango",
+									Requires =
+									{
+										new ProgressionLogic { Progression = "hasDrum", },
+										new ProgressionLogic { Progression = "canDestroyUFOrb", LogicGroup = 1 },
+										new ProgressionLogic { Progression = "hasAxe", LogicGroup = 1 }
+									},
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Matango Palace Chest",
+											Type = (int) LocationType.CHEST
+										},
+										new Location
+										{
+											Name = "Matango Cave Orb",
+											Type = (int) LocationType.CHECK,
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "canDestroyMCOrb" },
+											},
+											Provides = { new ProgressionLogic { Progression = "mc_orb" } }
+										},
+										new Location
+										{
+											Name = "Great Viper",
+											Type = (int) LocationType.BOSS,
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "canDestroyMCOrb" },
+											},
+										},
+									}
+								}
+							}
+						}
+					},
+				},
+				new Location
+				{
+					Name = "Mid Game",
+					Requires =
+					{
+						new ProgressionLogic { Progression = "hasDrum" },
+						new ProgressionLogic { Progression = "canDestroyUFOrb" },
+					},
+					Children = new List<Location>
+					{
+						new Location
+						{
+							Name = "Kakkara Desert",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Kakkara NPC",
+									Type = (int)LocationType.CHECK,
+									Requires = { new ProgressionLogic { Progression = "hasTail" } }
+								},
+								new Location
+								{
+									Name = "Fire Palace",
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Fire Palace Orb 1",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "fp_orb1" } },
+											Requires = { new ProgressionLogic { Progression = "canDestroyFPOrb1" } },
+										},
+										new Location
+										{
+											Name = "Fire Palace Orb 2",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "fp_orb2" } },
+											Requires =
+											{
+												new ProgressionLogic { Progression = "canDestroyFPOrb1" },
+												new ProgressionLogic { Progression = "canDestroyFPOrb2" },
+											},
+										},
+										new Location
+										{
+											Name = "Fire Palace Orb 3",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "fp_orb3" } },
+											Requires =
+											{
+												new ProgressionLogic { Progression = "canDestroyFPOrb1" },
+												new ProgressionLogic { Progression = "canDestroyFPOrb2" },
+												new ProgressionLogic { Progression = "canDestroyFPOrb3" },
+												new ProgressionLogic { Progression = "hasWhip" },
+											},
+										},
+										new Location
+										{
+											Name = "Fire Palace Near Entrance Chest",
+											Type = (int)LocationType.CHEST,
+											Requires = { new ProgressionLogic { Progression = "canDestroyFPOrb1" } },
+										},
+										new Location
+										{
+											Name = "Fire Palace Near Orb 2 Chest",
+											Type = (int)LocationType.CHEST,
+											Requires =
+											{
+												new ProgressionLogic { Progression = "canDestroyFPOrb1" },
+												new ProgressionLogic { Progression = "canDestroyFPOrb2" },
+											},
+										},
+										new Location
+										{
+											Name = "Fire Palace After Little Maze Chest",
+											Type = (int)LocationType.CHEST,
+											Requires =
+											{
+												new ProgressionLogic { Progression = "canDestroyFPOrb1" },
+												new ProgressionLogic { Progression = "canDestroyFPOrb2" },
+											},
+										},
+										new Location
+										{
+											Name = "Minotaur",
+											Type = (int)LocationType.BOSS,
+											Requires =
+											{
+												new ProgressionLogic { Progression = "canDestroyFPOrb1" },
+												new ProgressionLogic { Progression = "canDestroyFPOrb2" },
+												new ProgressionLogic { Progression = "canDestroyFPOrb3" },
+												new ProgressionLogic { Progression = "hasFirePalaceAccess" },
+												new ProgressionLogic { Progression = "hasWhip" },
+											},
+										},
+									}
+								},
+								new Location
+								{
+									Name = "Moon Palace",
+									Requires = { new ProgressionLogic { Progression = "hasDrum" } },
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Moon Palace Orb",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "mp_orb" } },
+											Requires = { new ProgressionLogic { Progression = "canDestroyMPOrb" } }
+										},
+										new Location
+										{
+											Name = "Moon Palace Seed", // Is this only one thing??? Poptracker says item_count 2??
+											Type = (int)LocationType.CHECK,
+											Requires =
+											{
+												new ProgressionLogic { Progression = "canDestroyMPOrb" },
+												new ProgressionLogic { Progression = "hasMoonPalaceAccess" },
+											}
+										},
+									}
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Vandole Empire",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "South Town Mara",
+									Type = (int)LocationType.CHECK
+								},
+								new Location
+								{
+									Name = "North Town",
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "North Town Castle",
+											Children = new List<Location>
+											{
+												new Location
+												{
+													Name = "Castle Double Chest - 1",
+													Type = (int)LocationType.CHEST,
+												},
+												new Location
+												{
+													Name = "Castle Double Chest - 2",
+													Type = (int)LocationType.CHEST,
+												},
+												new Location
+												{
+													Name = "Metal Mantis",
+													Type = (int)LocationType.BOSS,
+												},
+												new Location
+												{
+													Name = "Castle Chest",
+													Type = (int)LocationType.CHEST,
+												},
+												new Location
+												{
+													Name = "Mech Rider II",
+													Type = (int)LocationType.BOSS,
+												},
+											}
+										},
+										new Location
+										{
+											Name = "North Town Ruins",
+											Children = new List<Location>
+											{
+												new Location
+												{
+													Name = "North Town Ruins Left Chest",
+													Type = (int)LocationType.CHEST
+												},
+												new Location
+												{
+													Name = "North Town Ruins Right Chest",
+													Type = (int)LocationType.CHEST
+												},
+												new Location
+												{
+													Name = "North Town Ruins Inner Chest",
+													Type = (int)LocationType.CHEST
+												},
+												new Location
+												{
+													Name = "Doom's Wall",
+													Type = (int)LocationType.BOSS
+												},
+												new Location
+												{
+													Name = "Vampire",
+													Type = (int)LocationType.BOSS
+												},
+											}
+										}
+									}
+								},
+								new Location
+								{
+									Name = "Gold City",
+									Requires = { new ProgressionLogic { Progression = "hasDrum" } },
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Gold Tower",
+											Requires = { new ProgressionLogic { Progression = "hasKey" } },
+											Children = new List<Location>
+											{
+												new Location
+												{
+													Name = "Gold Tower Chest 1",
+													Type = (int)LocationType.CHEST
+												},
+												new Location
+												{
+													Name = "Gold Tower Chest 2",
+													Type = (int)LocationType.CHEST
+												},
+												new Location
+												{
+													Name = "Gold Tower Reward",
+													Type = (int)LocationType.CHECK,
+													Requires = { new ProgressionLogic { Progression = "hasLightPalaceAccess" } },
+												},
+												new Location
+												{
+													Name = "Gorgon Bull",
+													Type = (int)LocationType.BOSS,
+													Requires = { new ProgressionLogic { Progression = "hasLightPalaceAccess" } }
+												},
+											}
+										}
+									}
+								}
+							}
+						},
+						new Location
+						{
+							Name = "Ice Country",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Santas House Chest",
+									Type = (int)LocationType.CHEST
+								},
+								new Location
+								{
+									Name = "Salamando",
+									Type = (int)LocationType.BOSS
+								},
+								new Location
+								{
+									Name = "Ice Castle Chest",
+									Type = (int)LocationType.CHEST
+								},
+								new Location
+								{
+									Name = "Biting Lizard (x3)",
+									Type = (int)LocationType.BOSS
+								},
+								new Location
+								{
+									Name = "Frost Gigas",
+									Type = (int)LocationType.BOSS
+								},
+							}
+						}
+					}
+				},
+				new Location
+				{
+					Name = "Late Game",
+					Requires = { new ProgressionLogic { Progression = "hasDrum" } },
+					Children = new List<Location>
+					{
+						new Location
+						{
+							Name = "Lighthouse NPC",
+							Type = (int)LocationType.CHECK
+						},
+						new Location
+						{
+							Name = "Tasnica Miniboss",
+							Type = (int)LocationType.BOSS
+						},
+						new Location
+						{
+							Name = "Turtle Island NPC",
+							Type = (int)LocationType.CHECK
+						},
+						new Location
+						{
+							Name = "Lofty Mountains",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Palace of Darkness",
+									Requires = { new ProgressionLogic { Progression = "hasAxe" } },
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Palace of Darkness Walkway Chest",
+											Type = (int)LocationType.CHEST
+										},
+										new Location
+										{
+											Name = "Palace of Darkness Walkway Chest",
+											Type = (int)LocationType.CHEST
+										},
+										new Location
+										{
+											Name = "Palace of Darkness Reward",
+											Type = (int)LocationType.CHECK,
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "hasDarkPalaceAccess" },
+											},
+										},
+										new Location
+										{
+											Name = "Lime Slime",
+											Type = (int)LocationType.BOSS,
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "hasDarkPalaceAccess" },
+											},
+										},
+									}
+								},
+								new Location
+								{
+									Name = "Doppelgangers",
+									Type = (int)LocationType.BOSS,
+									Requires =
+									{
+										new ProgressionLogic { Progression = "hasAxe" },
+										new ProgressionLogic { Progression = "hasWhip" },
+									},
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Lost Continent",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Tree Palace",
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Tree Palace Reward",
+											Type = (int)LocationType.CHECK,
+											Requires = { new ProgressionLogic { Progression = "hasTreePalaceAccess" } },
+										},
+										new Location
+										{
+											Name = "Snap Dragon",
+											Type = (int)LocationType.BOSS,
+											Requires = { new ProgressionLogic { Progression = "hasTreePalaceAccess" } },
+										},
+										new Location
+										{
+											Name = "Hexas",
+											Type = (int)LocationType.BOSS,
+										},
+										new Location
+										{
+											Name = "Aegagropilon",
+											Type = (int)LocationType.BOSS,
+										},
+										new Location
+										{
+											Name = "Grand Palace Orb 1",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "gp_orb1" } },
+											Requires = { new ProgressionLogic { Progression = "canDestroyGPOrb1" } },
+										},
+										new Location
+										{
+											Name = "Grand Palace Orb 2",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "gp_orb2" } },
+											Requires = { new ProgressionLogic { Progression = "canDestroyGPOrb2" } },
+										},
+										new Location
+										{
+											Name = "Grand Palace Orb 3",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "gp_orb3" } },
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb1" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb3" },
+											},
+										},
+										new Location
+										{
+											Name = "Grand Palace Orb 4",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "gp_orb4" } },
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb2" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb4" },
+											},
+										},
+										new Location
+										{
+											Name = "Grand Palace Orb 5",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "gp_orb5" } },
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb1" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb3" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb5" },
+											},
+										},
+										new Location
+										{
+											Name = "Grand Palace Orb 6",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "gp_orb6" } },
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb2" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb4" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb6" },
+											},
+										},
+										new Location
+										{
+											Name = "Grand Palace Orb 7",
+											Type = (int)LocationType.CHECK,
+											Provides = { new ProgressionLogic { Progression = "gp_orb7" } },
+											Requires =
+											{
+												new ProgressionLogic { Progression = "hasWhip" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb1" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb2" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb3" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb4" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb5" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb6" },
+												new ProgressionLogic { Progression = "canDestroyGPOrb7" },
+											},
+										},
+										new Location
+										{
+											Name = "Grand Palace Chest",
+											Type = (int)LocationType.CHECK,
+											Requires = { new ProgressionLogic { Progression = "hasWhip" } },
+										},
+										new Location
+										{
+											Name = "Mech Rider III",
+											Type = (int)LocationType.BOSS,
+											Requires = { new ProgressionLogic { Progression = "grandPalaceBoss" } },
+										},
+									}
+								},
+								new Location
+								{
+									Name = "Undersea Palace",
+									Requires = { new ProgressionLogic { Progression = "hasAxe" } },
+									Children = new List<Location>
+									{
+										new Location
+										{
+											Name = "Undersea Palace Chest",
+											Type = (int)LocationType.CHEST,
+										},
+										new Location
+										{
+											Name = "Hydra",
+											Type = (int)LocationType.BOSS,
+										},
+										new Location
+										{
+											Name = "Kettle Kin",
+											Type = (int)LocationType.BOSS,
+										},
+									}
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Pure Land",
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Dragon Worm",
+									Type = (int)LocationType.BOSS,
+								},
+								new Location
+								{
+									Name = "Snow Dragon",
+									Type = (int)LocationType.BOSS,
+								},
+								new Location
+								{
+									Name = "Axe Beak",
+									Type = (int)LocationType.BOSS,
+								},
+								new Location
+								{
+									Name = "Red Dragon",
+									Type = (int)LocationType.BOSS,
+									Requires = { new ProgressionLogic { Progression = "canCutStuff" } },
+								},
+								new Location
+								{
+									Name = "Thunder Gigas",
+									Type = (int)LocationType.BOSS,
+									Requires = { new ProgressionLogic { Progression = "canCutStuff" } },
+								},
+								new Location
+								{
+									Name = "Blue Dragon",
+									Type = (int)LocationType.BOSS,
+									Requires = { new ProgressionLogic { Progression = "canCutStuff" } },
+								},
+								new Location
+								{
+									Name = "Pure Land Mana Tree",
+									Type = (int)LocationType.CHECK,
+									Requires =
+									{
+										new ProgressionLogic { Progression = "isVanillaShort" },
+										new ProgressionLogic { Progression = "canCutStuff" },
+										new ProgressionLogic { Progression = "isVanillaLong", LogicGroup = 1 },
+										new ProgressionLogic { Progression = "canCutStuff", LogicGroup = 1 },
+									},
+								},
+							}
+						},
+						new Location
+						{
+							Name = "Mana Fortress",
+							Requires = { new ProgressionLogic { Progression = "hasManaFortressAccess" } },
+							Children = new List<Location>
+							{
+								new Location
+								{
+									Name = "Buffy",
+									Type = (int)LocationType.BOSS
+								},
+								new Location
+								{
+									Name = "Dread Slime",
+									Type = (int)LocationType.BOSS
+								},
+							}
+						}
+					}
+				}
+			};
             return list;
         }
     }

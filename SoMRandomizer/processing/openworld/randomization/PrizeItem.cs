@@ -26,6 +26,12 @@ namespace SoMRandomizer.processing.openworld.randomization
         public double value; // higher = more important
         private int uid;
 
+		public static void initUID()
+		{
+			// Used mainly Python API to make sure the Random Generation returns expected results with multiple calls.
+			PRIZE_UID = 0;
+		}
+
         public PrizeItem(string name, string type, byte[] data, string hint, byte eventFlag, double prizeValue)
         {
             prizeName = name;
@@ -41,7 +47,7 @@ namespace SoMRandomizer.processing.openworld.randomization
 		public Dictionary<string, object> toDict()
 		{
 			Dictionary<string, object> outDict = new Dictionary<string, object> { };
-			outDict.Add("PRIZE_UID", PRIZE_UID);
+			//outDict.Add("PRIZE_UID", PRIZE_UID); // Not needed since everything has the same PRIZE_UID?
 			outDict.Add("prizeName", prizeName);
 			outDict.Add("prizeType", prizeType);
 			outDict.Add("eventData", eventData);

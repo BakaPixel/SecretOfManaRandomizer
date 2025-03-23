@@ -34,10 +34,14 @@ readme = "README.md"
 
 
 [tool.poetry.dependencies]
-python = "3.12.x"
+python = ">=3.12"
+pydantic = "*"
 # general python
 mypy = "*"
 ruff = "*"
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = "*"
 
 [tool.mypy]
 strict = true
