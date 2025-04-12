@@ -24,13 +24,13 @@ namespace SoMRandomizer.processing.openworld.randomization
         {
             Random r = context.randomFunctional;
             Dictionary<string, List<string>> plandoSettings = context.plandoSettings;
-            string goal = context.workingData.get(OpenWorldGoalProcessor.GOAL_SHORT_NAME);
-            List<string> plandoLocations = new List<string>();
+			string goal = context.workingData.get(OpenWorldGoalProcessor.GOAL_SHORT_NAME);
+			List<string> plandoLocations = new List<string>();
             bool flammieDrumInLogic = settings.getBool(OpenWorldSettings.PROPERTYNAME_FLAMMIE_DRUM_IN_LOGIC);
-            Dictionary<int, byte> crystalOrbColorMap = ElementSwaps.getCrystalOrbElementMap(context);
-            bool force100PercentPossible = !settings.getBool(OpenWorldSettings.PROPERTYNAME_ALLOW_MISSED_ITEMS);
-            bool anySpellTriggers = context.workingData.getBool(OpenWorldClassSelection.ANY_MAGIC_EXISTS);
-            string _upperLandElement = "no";
+			Dictionary<int, byte> crystalOrbColorMap = ElementSwaps.getCrystalOrbElementMap(context);
+			bool force100PercentPossible = !settings.getBool(OpenWorldSettings.PROPERTYNAME_ALLOW_MISSED_ITEMS);
+			bool anySpellTriggers = context.workingData.getBool(OpenWorldClassSelection.ANY_MAGIC_EXISTS);
+			string _upperLandElement = "no";
             if (flammieDrumInLogic)
             {
                 _upperLandElement = (!anySpellTriggers) ? "no" : SomVanillaValues.elementOrbByteToName(crystalOrbColorMap[ElementSwaps.ORBMAP_UPPERLAND], false);
@@ -60,17 +60,17 @@ namespace SoMRandomizer.processing.openworld.randomization
                     }
                 }
                 allAvailablePrizes[prizeLocation] = availablePrizes;
-            }
+			}
 
-            if (plandoSettings.Count > 0)
+			if (plandoSettings.Count > 0)
             {
                 if (!Plando.doPlando(r, plandoSettings, itemPlacements, allAvailablePrizes, allPrizes, plandoLocations))
                 {
                     throw new Exception("Plando specified impossible settings! See log for details.");
                 }
-            }
+			}
 
-            bool bypassValidation = plandoSettings.ContainsKey(KEY_BYPASS_VALIDATION) && plandoSettings[KEY_BYPASS_VALIDATION].Contains("yes");
+			bool bypassValidation = plandoSettings.ContainsKey(KEY_BYPASS_VALIDATION) && plandoSettings[KEY_BYPASS_VALIDATION].Contains("yes");
 
             for (int i = 0; i < 7; i++)
             {
@@ -81,9 +81,9 @@ namespace SoMRandomizer.processing.openworld.randomization
                         loc.lockedByPrizes = new string[] { };
                     }
                 }
-            }
+			}
 
-            foreach (PrizeLocation prizeLocation in filteredLocations)
+			foreach (PrizeLocation prizeLocation in filteredLocations)
             {
                 // skip if we plandoed it
                 if (plandoLocations.Contains(prizeLocation.locationName))
@@ -98,18 +98,18 @@ namespace SoMRandomizer.processing.openworld.randomization
                     availablePrizes.Clear();
                     availablePrizes.Add(lookupByName(allPrizes, "starter weapon (main)"));
                 }
-                else if (prizeLocation.locationName == "starter weapon (alt)")
-                {
-                    // special case these to match
-                    availablePrizes.Clear();
-                    availablePrizes.Add(lookupByName(allPrizes, "starter weapon (alt)"));
-                }
-                else
-                {
-                    // don't allow these to show up anywhere else.
-                    removeByName(availablePrizes, "starter weapon (main)");
-                    removeByName(availablePrizes, "starter weapon (alt)");
-                }
+				else if (prizeLocation.locationName == "starter weapon (alt)")
+				{
+					// special case these to match
+					availablePrizes.Clear();
+					availablePrizes.Add(lookupByName(allPrizes, "starter weapon (alt)"));
+				}
+				else
+				{
+					// don't allow these to show up anywhere else.
+					removeByName(availablePrizes, "starter weapon (main)");
+					removeByName(availablePrizes, "starter weapon (alt)");
+				}
 
                 if (prizeLocation.locationName.Contains("chest"))
                 {
@@ -177,12 +177,12 @@ namespace SoMRandomizer.processing.openworld.randomization
                         }
                     }
                 }
-            }
-            
-            // inject santa gifts' dependencies based on what all we picked
-            // prizesForLookup: location name -> prize name
-            // prizeObjectsForLookup location name -> prize obj
-            if (goal == OpenWorldGoalProcessor.GOAL_GIFTMODE)
+			}
+
+			// inject santa gifts' dependencies based on what all we picked
+			// prizesForLookup: location name -> prize name
+			// prizeObjectsForLookup location name -> prize obj
+			if (goal == OpenWorldGoalProcessor.GOAL_GIFTMODE)
             {
                 List<string> xmasGifts = new List<string>();
                 List<string> possibleGifts = new List<string>();

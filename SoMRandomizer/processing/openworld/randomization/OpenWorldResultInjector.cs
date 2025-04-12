@@ -2,6 +2,7 @@
 using SoMRandomizer.logging;
 using SoMRandomizer.processing.common;
 using SoMRandomizer.processing.openworld.events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,15 +32,20 @@ namespace SoMRandomizer.processing.openworld.randomization
                 int eventNum = prizeLocation.eventNum;
                 int index = prizeLocation.eventReplacementIndex;
                 PrizeItem thisPrize = prizePlacements[prizeLocation];
+				Console.WriteLine($"{prizeLocation.locationName}: {prizeLocation.eventNum} + {prizeLocation.eventReplacementIndex} - {thisPrize.prizeName}");
 
-                List<byte> eventData = context.replacementEvents[eventNum];
+				List<byte> eventData = context.replacementEvents[eventNum];
                 List<byte> injectionPattern = new List<byte>();
                 foreach (byte b in PrizeEvents.OPENWORLD_EVENT_INJECTION_PATTERN)
                 {
                     injectionPattern.Add(b);
                 }
                 injectionPattern.Add((byte)index);
-                VanillaEventUtil.replaceEventData(injectionPattern, eventData, thisPrize.eventData.ToList());
+				Console.WriteLine(string.Join(" ", injectionPattern.Select(b => b.ToString("X2"))));
+				Console.WriteLine(string.Join(" ", eventData.Select(b => b.ToString("X2"))));
+				Console.WriteLine(string.Join(" ", thisPrize.eventData.ToList().Select(b => b.ToString("X2"))));
+				Console.WriteLine();
+				VanillaEventUtil.replaceEventData(injectionPattern, eventData, thisPrize.eventData.ToList());
 
                 // set the visibility flag for chests so they disappear once giving their prize.
                 // don't change the two whip chests since spikey death makes them appear; event flags D8, D9

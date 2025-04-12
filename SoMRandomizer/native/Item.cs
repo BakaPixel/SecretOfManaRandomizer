@@ -1,10 +1,83 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SoMRandomizer.processing.openworld.randomization;
+using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Xml.Linq;
 
 namespace SoMRandomizer.native
 {
+	public struct GenerateAP
+	{
+		public int SoMRHubIndex { get; set; }
+		public string PrizeLocations { get; set; }
+		public string PrizeItems { get; set; }
+		public string sourcePath { get; set; }
+		public string destPath { get; set; }
+
+		public List<PrizeItem> GetPrizeItems()
+		{
+			var list_jo = (JsonConvert.DeserializeObject(PrizeItems) as JArray).ToList();
+
+			var output = new List<PrizeItem>();
+
+			foreach (var item in list_jo)
+			{
+				var to_add = new PrizeItem
+				(
+					(string)item["prizeName"],
+					(string)item["prizeType"],
+					Encoding.UTF8.GetBytes((string)item["data"]),
+					(string)item["hint"],
+					(byte)item["eventFlag"],
+					(double)item["prizeValue"]
+				);
+				output.Add(to_add);
+			}
+			return output;
+		}
+
+		public List<PrizeLocation> GetPrizeLocations()
+		{
+			var list_jo = (JsonConvert.DeserializeObject(PrizeLocations) as JArray).ToList();
+
+			var output = new List<PrizeLocation>();
+
+			foreach (var item in list_jo)
+			{
+				var to_add = new PrizeLocation
+				(
+					(string)item["name"],
+					(int)item["map"],
+					(int)item["obj"],
+					(int)item["evNum"],
+					(int)item["evReplaceIndex"],
+					(item["typeOptions"] as JArray).Select(i => i.ToString()).ToArray(),
+					(item["hints"] as JArray).Select(i => i.ToString()).ToArray(),
+					(item["lockedBy"] as JArray).Select(i => i.ToString()).ToArray(),
+					(double)item["locationReachability"]
+				);
+				output.Add(to_add);
+			}
+			return output;
+		}
+	}
+
+	public struct GenerateConfig
+	{
+		public string seed { get; set; }
+		public string entries { get; set; }
+
+		public Dictionary<string, string> getEntries()
+		{
+			return JsonConvert.DeserializeObject<Dictionary<string, string>>(entries);
+		}
+	}
 	public interface ISerializableObject
 	{
 		Dictionary<string, object> toDict();
@@ -30,10 +103,11 @@ namespace SoMRandomizer.native
 
 	public enum ItemType
 	{
+		TRAP = -1,
 		WEAPON = 0,
 		SEED,
 		SPELL,
-		PROGRESSION,
+		KEY_ITEM,
 		CHARACTER,
 		FILLER,
 		ORB,
@@ -44,10 +118,8 @@ namespace SoMRandomizer.native
         public string name;
         public string internal_name = null;
         public long id;
-		public bool progression = false;
-		public bool useful = false;
 		public int type = -1;
-		public List<ProgressionLogic> provides = new List<ProgressionLogic> { };
+		public int _count = 1;
 
 		public Dictionary<string, object> toDict()
 		{
@@ -56,50 +128,36 @@ namespace SoMRandomizer.native
 				{ "name", name },
 				{ "internal_name", internal_name },
 				{ "id", id },
-				{ "progression", progression },
-				{ "useful", useful },
 				{ "type", type },
-				{ "provides", provides.ConvertAll(p => (Dictionary<string, object>)p) },
 			};
 			return output;
 		}
-
 	}
+
 	public enum LocationType
 	{
-		BOSS = 0,
-		CHEST,
+		NAN = -1,
+		CHEST = 0,
+		BOSS,
 		CHECK,
 	}
-
 	public class Location : ISerializableObject
 	{
-        public string Name;
-		public int Difficulty = 0;
-		public int Type = -1;
-		public int Id = -1;
-		public List<ProgressionLogic> Requires = new List<ProgressionLogic> { };
-		public List<ProgressionLogic> Provides = new List<ProgressionLogic> { };
-		public List<Location> Children = new List<Location> { };
+		public string name;
+		public string internal_name;
+		public long id;
+		public int type = -1;
 
 		public Dictionary<string, object> toDict()
 		{
 			var output = new Dictionary<string, object>
 			{
-				{ "name", Name },
-				{ "difficulty", Difficulty },
-				{ "type", Type },
-				{ "id", Id },
-				{ "requires", Requires.ConvertAll(p => (Dictionary<string, object>)p) },
-				{ "provides", Provides.ConvertAll(p => (Dictionary<string, object>)p) },
-				{ "children", Children.ConvertAll(p => (Dictionary<string, object>)p) },
+				{ "name", name },
+				{ "internal_name", internal_name },
+				{ "id", id },
+				{ "type", type },
 			};
 			return output;
-		}
-
-		public static explicit operator Dictionary<string, object>(Location location)
-		{
-			return location.toDict();
 		}
 	}
 }

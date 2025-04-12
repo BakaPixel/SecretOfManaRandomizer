@@ -1,8 +1,11 @@
 ﻿using SoMRandomizer.config.settings;
 using SoMRandomizer.processing.common.structure;
 using SoMRandomizer.processing.hacks.common.util;
+using SoMRandomizer.processing.openworld;
+using SoMRandomizer.processing.openworld.randomization;
 using System;
 using System.Collections.Generic;
+using System.Runtime;
 
 namespace SoMRandomizer.processing.common
 {
@@ -43,5 +46,12 @@ namespace SoMRandomizer.processing.common
         public Dictionary<int, Door> replacementDoors = new Dictionary<int, Door>();
         // generated map palette sets
         public Dictionary<int, MapPaletteSet> replacementMapPalettes = new Dictionary<int, MapPaletteSet>();
-    }
+
+		// Archipelago Context
+		public string genStart = "gui";
+		public OpenWorldGenerator owGenerator;
+		public List<PrizeLocation> owAllLocations;
+		public List<PrizeItem> owAllPrizes;
+		public Dictionary<int, byte> crystalOrbElementMap;
+	}
 }

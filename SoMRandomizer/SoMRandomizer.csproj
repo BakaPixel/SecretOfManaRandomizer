@@ -112,6 +112,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Text.Json" Version="9.0.3" />
     <PackageReference Include="U8XmlParser" Version="1.6.1" />
   </ItemGroup>
 

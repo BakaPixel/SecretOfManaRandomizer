@@ -83,9 +83,9 @@ namespace SoMRandomizer.processing.openworld.randomization
                 importantPrizes.Add("dark seed");
                 importantPrizes.Add("moon seed");
                 importantPrizes.Add("dryad seed");
-            }
+			}
 
-            if (goal == OpenWorldGoalProcessor.GOAL_GIFTMODE)
+			if (goal == OpenWorldGoalProcessor.GOAL_GIFTMODE)
             {
                 for(int i=0; i < 8; i++)
                 {
@@ -106,39 +106,39 @@ namespace SoMRandomizer.processing.openworld.randomization
                 importantPrizes.Add("shade spells");
                 importantPrizes.Add("luna spells");
                 importantPrizes.Add("dryad spells");
-            }
+			}
 
-            Dictionary<string, string> nesoHints = new Dictionary<string, string>();
+			Dictionary<string, string> nesoHints = new Dictionary<string, string>();
             int nesoHintAttempts = 0;
             while (nesoHints.Count < 3 && nesoHintAttempts < 100)
-            {
-                string hintPrize = importantPrizes.Count == 0 ? "" : importantPrizes[r.Next() % importantPrizes.Count];
-                importantPrizes.Remove(hintPrize);
+			{
+				string hintPrize = importantPrizes.Count == 0 ? "" : importantPrizes[r.Next() % importantPrizes.Count];
+				importantPrizes.Remove(hintPrize);
                 foreach (PrizeLocation location in itemPlacements.Keys)
                 {
                     if (itemPlacements[location].prizeName == hintPrize)
-                    {
-                        string nesoHint = location.locationHints[r.Next() % location.locationHints.Length];
-                        if (nesoHint != "" && !nesoHints.ContainsKey(hintPrize))
+					{
+						string nesoHint = location.locationHints[r.Next() % location.locationHints.Length];
+						if (nesoHint != "" && !nesoHints.ContainsKey(hintPrize))
                         {
                             nesoHints[hintPrize] = nesoHint;
                         }
                     }
                 }
                 nesoHintAttempts++;
-            }
+			}
 
-            int nesoHintNum = 0;
+			int nesoHintNum = 0;
             foreach(string prize in nesoHints.Keys)
             {
                 context.workingData.set(NESO_PRIZE_PREFIX + nesoHintNum, prize);
                 context.workingData.set(NESO_HINT_PREFIX + nesoHintNum, nesoHints[prize]);
                 nesoHintNum++;
-            }
+			}
 
-            int[] hintEvents = HintEventNames.Keys.ToArray();
+			int[] hintEvents = HintEventNames.Keys.ToArray();
 
-            string[] hintPhrases = new string[]
+			string[] hintPhrases = new string[]
             {
                 "You can find %1 %2.",
                 "Look %2 for %1.",
@@ -231,20 +231,20 @@ namespace SoMRandomizer.processing.openworld.randomization
             if (giveMoreGrandPalaceHints)
             {
                 grandPalaceHintChance = 3; // 33%
-            }
+			}
 
-            List<OpenWorldSpecialHintTypes> remainingSpecialHints = new List<OpenWorldSpecialHintTypes>{OpenWorldSpecialHintTypes.MECH_RIDER_3_PRICE};
+			List<OpenWorldSpecialHintTypes> remainingSpecialHints = new List<OpenWorldSpecialHintTypes>{OpenWorldSpecialHintTypes.MECH_RIDER_3_PRICE};
             if (hasItemAtLocation(itemPlacements, "fire seed"))
             {
                 remainingSpecialHints.Add(OpenWorldSpecialHintTypes.FIRE_PLACE_FINAL_PRICE);
-            }
+			}
 
-            if (randomGrandPalaceElements && anySpellsExists)
+			if (randomGrandPalaceElements && anySpellsExists)
             {
                 remainingSpecialHints.Add(OpenWorldSpecialHintTypes.TOTAL_ORB_ELEMENTS_GRAND_PALACE);
-            }
+			}
 
-            foreach (int hintEvent in hintEvents)
+			foreach (int hintEvent in hintEvents)
             {
                 /* Current chances for rolling hints
                  * useful hint: 80%
@@ -260,15 +260,15 @@ namespace SoMRandomizer.processing.openworld.randomization
                 // normal, useful hint
                 // 80%
                 if (usefulHint)
-                {
-                    string hintPhrase;
+				{
+					string hintPhrase;
                     // a few specific ones
                     // 20%, max. 3
                     bool specialHint = remainingSpecialHints.Count > 0 && r.Next(5) == 0;
-                    if (specialHint)
+					if (specialHint)
                     {
                         OpenWorldSpecialHintTypes type = remainingSpecialHints[r.Next(remainingSpecialHints.Count)];
-                        switch (type)
+						switch (type)
                         {
                             case OpenWorldSpecialHintTypes.FIRE_PLACE_FINAL_PRICE:
                             {
@@ -297,9 +297,9 @@ namespace SoMRandomizer.processing.openworld.randomization
                         remainingSpecialHints.Remove(type);
                     }
                     else if (randomGrandPalaceElements && anySpellsExists && r.Next(grandPalaceHintChance) == 0)
-                    {
-                        //orb element (not) needed for grand palace
-                        byte eleNum = (byte)(0x81 + r.Next(validElements.Count));
+					{
+						//orb element (not) needed for grand palace
+						byte eleNum = (byte)(0x81 + r.Next(validElements.Count));
                         string dependency = SomVanillaValues.elementOrbByteToName(eleNum, false) + " spells";
                         if (!grandPalaceBossDependencies.Contains(dependency))
                         {
@@ -311,9 +311,9 @@ namespace SoMRandomizer.processing.openworld.randomization
                         }
                     }
                     else
-                    {
-                        // treasure location
-                        hintPhrase = hintPhrases[r.Next() % hintPhrases.Length];
+					{
+						// treasure location
+						hintPhrase = hintPhrases[r.Next() % hintPhrases.Length];
                         List<PrizeLocation> keys = itemPlacements.Keys.ToList();
                         PrizeLocation location = keys[r.Next() % keys.Count];
                         string prize = itemPlacements[location].prizeName;

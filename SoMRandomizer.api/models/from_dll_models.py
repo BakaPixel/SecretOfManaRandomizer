@@ -1,6 +1,5 @@
 from enum import Enum, auto
-from typing import Any, Self
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, field_validator
 
 
 class PrizeItem(BaseModel):
@@ -26,36 +25,21 @@ class PrizeLocation(BaseModel):
 
 
 class ItemType(Enum):
+    TRAP = -1
     WEAPON = 0
     SEED = auto()
     SPELL = auto()
-    PROGRESSION = auto()
+    KEY_ITEM = auto()
     CHARACTER = auto()
     FILLER = auto()
     ORB = auto()
-
-
-class LocationType(Enum):
-    NAN = -1
-    BOSS = auto()
-    CHEST = auto()
-    CHECK = auto()
-
-
-class ProgressionLogic(BaseModel):
-    progression: str
-    amount: int = 1
-    logic_group: int = 0
 
 
 class fdll_Item(BaseModel):
     name: str
     internal_name: str | None = ""
     id: int
-    progression: bool | None = False
-    useful: bool | None = False
     type: ItemType | None = -1
-    provides: list[ProgressionLogic] | None = []
 
     @field_validator("internal_name", mode="before")
     def convert_none_to_empty_string(cls, v):
@@ -63,24 +47,17 @@ class fdll_Item(BaseModel):
             return ""
         return v
 
+class LocationType(Enum):
+    NAN = -1
+    CHEST = 0
+    BOSS = auto()
+    CHECK = auto()
 
 class fdll_Location(BaseModel):
     name: str
     internal_name: str | None = ""
-    type: LocationType | None = LocationType.NAN
-    difficulty: int = -1
-    id: int = -1
-    requires: list[ProgressionLogic] | None = []
-    provides: list[ProgressionLogic] | None = []
-    children: list[Self] | None = []
-
-    @model_validator(mode="before")
-    def before_validator(cls, values: dict[str, Any]):
-        id = values.get("id", -1)
-        # TODO: Add id's??? and remove the False to enable this safety check or remove this whole thing
-        if id < 0 and len(values.get("children", [])) == 0 and False:
-            raise ValueError(f"Id: {id} isn't valid for {values} - Update with real id.")
-        return values
+    id: int
+    type: LocationType | None = -1
 
     @field_validator("internal_name", mode="before")
     def convert_none_to_empty_string(cls, v):

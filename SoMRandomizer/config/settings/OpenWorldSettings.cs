@@ -71,7 +71,7 @@ namespace SoMRandomizer.config.settings
         public const string PROPERTYVALUE_STAT_GROWTH_DIFFICULTY_HARD = "hard";
         public const string PROPERTYVALUE_STAT_GROWTH_DIFFICULTY_IMPOSSIBLE = "impossible";
 
-        public const string PROPERTYVALUE_OOPSALL_RANDOM = "random";
+        public const string PROPERTYVALUE_OOPSALL_RANDOM = "chaos";
 
         public OpenWorldSettings(CommonSettings commonSettings) : base(commonSettings)
         {
@@ -100,8 +100,8 @@ namespace SoMRandomizer.config.settings
             setInitial(PROPERTYNAME_FLAMMIE_DRUM_IN_LOGIC, false); // have to find flammie drum
 
             // enumerations
-            setInitial(PROPERTYNAME_RANDOMIZE_ENEMIES, new string[] { "vanilla", "swap", "random", "oops", "none" }, new string[] { "Vanilla", "Swap", "Random spawns", "Oops! All owls", "None" }, "swap");
-            setInitial(PROPERTYNAME_RANDOMIZE_BOSSES, new string[] { "vanilla", "swap", "random" }, new string[] { "Vanilla", "Swap", "Random" }, "random");
+            setInitial(PROPERTYNAME_RANDOMIZE_ENEMIES, new string[] { "vanilla", "swap", "chaos", "oops", "none" }, new string[] { "Vanilla", "Swap", "Random spawns", "Oops! All owls", "None" }, "swap");
+            setInitial(PROPERTYNAME_RANDOMIZE_BOSSES, new string[] { "vanilla", "swap", "chaos" }, new string[] { "Vanilla", "Swap", "Random" }, "chaos" );
             setInitial(PROPERTYNAME_STATUS_AILMENTS, new string[] { "location", "type", "easy", "annoying", "awful" }, new string[] { "Location", "Enemy type", "Random (easy)", "Random (annoying)", "Random (awful)" }, "location");
             setInitial(PROPERTYNAME_ENEMY_STAT_GROWTH, new string[] { "player", "bosses", "timed", "nofuture", "vanilla" }, new string[] { "Match player", "Increase after bosses", "Timed", "No Future", "Vanilla" }, "player");
             setInitial(PROPERTYNAME_ENEMY_STAT_GROWTH_DIFFICULTY, new string[]
@@ -115,7 +115,7 @@ namespace SoMRandomizer.config.settings
             }, new string[] { "Easy", "Sorta easy", "Normal", "Kinda hard", "Hard", "Impossible" }, PROPERTYVALUE_STAT_GROWTH_DIFFICULTY_NORMAL);
             setInitial(PROPERTYNAME_START_WITH_GIRL_AND_SPRITE, new string[] { "startboth", "findbothL1", "findbothCL", "start1find1", "start1only", "find1L1", "find1CL", "none" }, 
                 new string[] { "Start with both", "Find both at level 1", "Find both at current level", "Start with one, find the other", "Start with one, other doesn't exist", "Find one at level 1", "Find one at current level", "They don't exist" }, "findbothL1");
-            setInitial(PROPERTYNAME_STARTING_CHAR, new string[] { "random", "boy", "girl", "sprite" }, new string[] { "Random", "Boy", "Girl", "Sprite" }, "boy");
+            setInitial(PROPERTYNAME_STARTING_CHAR, new string[] { "chaos", "boy", "girl", "sprite" }, new string[] { "Random", "Boy", "Girl", "Sprite" }, "boy");
             setInitial(PROPERTYNAME_MANA_BEAST_SCALING, new string[] { "vanilla", "scaled" }, new string[] { "Vanilla", "Scaled" }, "scaled");
             setInitial(PROPERTYNAME_COMPLEXITY, new string[] { "dontcare", "easy", "hard" }, new string[] { "Don't care", "Easy", "Hard" }, "dontcare");
             setInitial(PROPERTYNAME_LOGIC_MODE, new string[] { "basic", "restrictive" }, new string[] { "Basic", "Restrictive" }, "basic");
@@ -265,7 +265,7 @@ namespace SoMRandomizer.config.settings
             numberSeedsRequiredOptions.Add("7");
             numberSeedsRequiredOptions.Add("8");
             string[] numSeedsFlagsValues = new string[9];
-            numSeedsFlagsValues[0] = "random";
+            numSeedsFlagsValues[0] = "chaos";
             for (int i = 0; i < 8; i++)
             {
                 numSeedsFlagsValues[i + 1] = "" + (i + 1);
@@ -311,8 +311,8 @@ namespace SoMRandomizer.config.settings
             characterOptions.Add("Girl");
             characterOptions.Add("Sprite");
             List<string> characterOptionValues = new List<string>();
-            characterOptionValues.Add("random");
-            characterOptionValues.Add("randomunique");
+            characterOptionValues.Add("chaos");
+            characterOptionValues.Add("chaosunique");
             characterOptionValues.Add("OGboy");
             characterOptionValues.Add("OGgirl");
             characterOptionValues.Add("OGsprite");

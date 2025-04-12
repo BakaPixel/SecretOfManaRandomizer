@@ -169,87 +169,93 @@ namespace SoMRandomizer.processing.common
             modeSpecificHacks.Add(modeSpecificHack);
         }
 
+		public static (byte[], byte[]) initRomFiles(string sourcePath, string destPath)
+		{
+			if (sourcePath == null || sourcePath == "" || destPath == null || destPath == "")
+			{
+				throw new Exception("No ROM selected.");
+			}
+			else if (sourcePath == destPath)
+			{
+				throw new Exception("Failed - source and destination file are the same!");
+			}
+			else
+			{
+				try
+				{
+					FileStream fs = new FileStream(destPath, FileMode.Create, FileAccess.Write);
+					if (!fs.CanWrite)
+					{
+						throw new Exception("Can't write to destination file.");
+					}
+					fs.Close();
+				}
+				catch (Exception)
+				{
+					throw new Exception("Can't write to destination file.");
+				}
+			}
+			byte[] origRom = null;
+			try
+			{
+				origRom = File.ReadAllBytes(sourcePath);
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Cannot open source file: " + e.Message);
+			}
+			if (origRom == null)
+			{
+				throw new Exception("Cannot open source file");
+			}
+			if (origRom.Length != 2 * 1024 * 1024 && origRom.Length != 2 * 1024 * 1024 + 0x200)
+			{
+				throw new Exception("Source file had unexpected size; should be 16 Megabit ROM");
+			}
+
+			int headerSize = 0;
+			if (origRom.Length != 2 * 1024 * 1024)
+			{
+				headerSize = 0x200;
+			}
+			byte[] outFile = new byte[4 * 1024 * 1024];
+			for (int i = 0; i < 2 * 1024 * 1024; i++)
+			{
+				outFile[i] = origRom[i + headerSize];
+			}
+
+			char[] nameChars = new char[14];
+			// remove header from origRom too
+			origRom = new byte[outFile.Length];
+			for (int i = 0; i < 2 * 1024 * 1024; i++)
+			{
+				origRom[i] = outFile[i];
+			}
+			headerSize = 0;
+
+			for (int i = 0; i < nameChars.Length; i++)
+			{
+				nameChars[i] = (char)origRom[i + 0xFFC0 + headerSize];
+			}
+			if (new string(nameChars) != "Secret of MANA")
+			{
+				throw new Exception("Name of game did not match the expected \"Secret of MANA\"");
+			}
+			if (origRom[0xFFD9 + headerSize] != 1)
+			{
+				throw new Exception("Please use US ROM only.");
+			}
+			if (origRom[0xFFDB + headerSize] != 0)
+			{
+				throw new Exception("Please use version 1.0 only.");
+			}
+			return ( origRom,  outFile );
+		}
+
         // note that this will overwrite destPath if it exists. if this is undesirable, it should be checked first before calling
         public static void initGeneration(string sourcePath, string destPath, string seed, Dictionary<string, RomGenerator> generatorsByRomType, CommonSettings commonSettings, Dictionary<string, RandoSettings> settingsByRomType)
         {
-            if (sourcePath == null || sourcePath == "" || destPath == null || destPath == "")
-            {
-                throw new Exception("No ROM selected.");
-            }
-            else if (sourcePath == destPath)
-            {
-                throw new Exception("Failed - source and destination file are the same!");
-            }
-            else
-            {
-                try
-                {
-                    FileStream fs = new FileStream(destPath, FileMode.Create, FileAccess.Write);
-                    if (!fs.CanWrite)
-                    {
-                        throw new Exception("Can't write to destination file.");
-                    }
-                    fs.Close();
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Can't write to destination file.");
-                }
-            }
-            byte[] origRom = null;
-            try
-            {
-                origRom = File.ReadAllBytes(sourcePath);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Cannot open source file: " + e.Message);
-            }
-            if (origRom == null)
-            {
-                throw new Exception("Cannot open source file");
-            }
-            if (origRom.Length != 2 * 1024 * 1024 && origRom.Length != 2 * 1024 * 1024 + 0x200)
-            {
-                throw new Exception("Source file had unexpected size; should be 16 Megabit ROM");
-            }
-
-            int headerSize = 0;
-            if (origRom.Length != 2 * 1024 * 1024)
-            {
-                headerSize = 0x200;
-            }
-            byte[] outFile = new byte[4 * 1024 * 1024];
-            for (int i = 0; i < 2 * 1024 * 1024; i++)
-            {
-                outFile[i] = origRom[i + headerSize];
-            }
-
-            char[] nameChars = new char[14];
-            // remove header from origRom too
-            origRom = new byte[outFile.Length];
-            for (int i = 0; i < 2 * 1024 * 1024; i++)
-            {
-                origRom[i] = outFile[i];
-            }
-            headerSize = 0;
-
-            for (int i = 0; i < nameChars.Length; i++)
-            {
-                nameChars[i] = (char)origRom[i + 0xFFC0 + headerSize];
-            }
-            if (new string(nameChars) != "Secret of MANA")
-            {
-                throw new Exception("Name of game did not match the expected \"Secret of MANA\"");
-            }
-            if (origRom[0xFFD9 + headerSize] != 1)
-            {
-                throw new Exception("Please use US ROM only.");
-            }
-            if (origRom[0xFFDB + headerSize] != 0)
-            {
-                throw new Exception("Please use version 1.0 only.");
-            }
+			var (origRom, outFile) = initRomFiles(sourcePath, destPath);;
 
             // this is just for logging later
             commonSettings.set("SourceROMName", sourcePath);
@@ -288,9 +294,9 @@ namespace SoMRandomizer.processing.common
             commonSettings.setInt(CommonSettings.PROPERTYNAME_CURRENT_PROGRESS, 0);
         }
 
-		public static void initGenerate(String seed, RandoSettings settings, RandoContext context)
+		public static (Logging, Logging, Logging) preGenerate(String seed, RandoSettings settings, RandoContext context)
 		{
-			// Generalized Init for use in NativeApi
+			// Generalized Init Random Inits
 			PrizeItem.initUID();
 
 			// https://github.com/dotnet/coreclr/blob/release/1.1.0/src/mscorlib/src/System/Random.cs/
@@ -298,114 +304,116 @@ namespace SoMRandomizer.processing.common
 			context.randomFunctional = new DotNet110Random(HashcodeUtil.GetDeterministicHashCode(seed));
 			// different random for cosmetics, so you can change them and not impact the rando
 			context.randomCosmetic = new DotNet110Random(HashcodeUtil.GetDeterministicHashCode(seed + "_cosmetic"));
+
+			// open log files
+			Logging fileLogger = null;
+			Logging fileLoggerSpoiler = null;
+			Logging fileLoggerDebug = null;
+
+			String filenameSeed = seed;
+			char[] badChars = new char[] { '\\', '/', ':', '<', '>', '\'', '\"', '*', '?', '|' };
+			foreach (char c in badChars)
+			{
+				filenameSeed = filenameSeed.Replace(c, '_');
+			}
+
+			if (settings.getBool(CommonSettings.PROPERTYNAME_RACE_MODE))
+			{
+				// advance randomness state up to 8 times.
+				// no clue if this is needed, once might be fine as well
+				int times = context.randomFunctional.Next(8);
+				for (; times > 0; times--) context.randomFunctional.Next();
+			}
+			Logging.ClearLoggers();
+			if (settings.getBool(CommonSettings.PROPERTYNAME_TEST_ONLY))
+			{
+				fileLogger = new DebugLogger();
+				fileLoggerSpoiler = new DebugLogger();
+				fileLoggerDebug = new DebugLogger();
+			}
+			else
+			{
+				fileLogger = new FileLogger("./log_" + filenameSeed + ".txt");
+				if (settings.getBool(CommonSettings.PROPERTYNAME_SPOILER_LOG) && !settings.getBool(CommonSettings.PROPERTYNAME_RACE_MODE))
+				{
+					fileLoggerSpoiler = new FileLogger("./log_" + filenameSeed + "_SPOILER.txt");
+				}
+				else
+				{
+					fileLoggerSpoiler = new NullWriter();
+				}
+				if (settings.getBool(CommonSettings.PROPERTYNAME_DEBUG_LOG))
+				{
+					fileLoggerDebug = new FileLogger("./log_" + filenameSeed + "_DEBUG.txt");
+				}
+				else
+				{
+					fileLoggerDebug = new NullWriter();
+				}
+			}
+			Logging.AddLogger(fileLogger);
+			Logging.AddLogger("spoiler", fileLoggerSpoiler);
+			Logging.AddLogger("debug", fileLoggerDebug);
+			Logging.AddLogger(fileLoggerDebug); // include general messages in the debug log, too
+			Logging.debugEnabled = true;
+
+			// log all the incoming settings, and seed
+			Logging.log("-------------------------------------------------");
+			Logging.log("Begin ROM generation at " + DateTime.Now + " with version " + settings.get(CommonSettings.PROPERTYNAME_VERSION));
+			Logging.log("Seed = " + seed);
+			Logging.log("Options = " + settings);
+			Logging.log("-------------------------------------------------");
+
+			return (fileLogger, fileLoggerDebug, fileLoggerSpoiler);
 		}
 
-        public bool generate(byte[] origRom, byte[] outRom, String seed, RandoSettings settings)
+		public static void postGenerate(byte[] origRom, byte[] outRom, String seed, RandoSettings settings, RandoContext context)
+		{
+			if (context.replacementEvents.Count > 0)
+			{
+				EventExpander eventExpander = new EventExpander();
+				eventExpander.process(outRom, context.replacementEvents, ref context.workingOffset);
+			}
+			if (context.replacementMapPieces.Count > 0)
+			{
+				MapPieceExpander mapPieceExpander = new MapPieceExpander();
+				mapPieceExpander.process(outRom, context.replacementMapPieces, ref context.workingOffset);
+			}
+			if (context.replacementDoors.Count > 0)
+			{
+				DoorReplacer doorReplacer = new DoorReplacer();
+				doorReplacer.process(outRom, context);
+			}
+			if (context.generatedMaps.Count > 0)
+			{
+				FullMapReplacer fullMapReplacer = new FullMapReplacer();
+				fullMapReplacer.process(outRom, context);
+			}
+			if (context.replacementMapPalettes.Count > 0)
+			{
+				MapPaletteSetReplacer mapPaletteSetReplacer = new MapPaletteSetReplacer();
+				mapPaletteSetReplacer.process(context);
+			}
+
+			context.eventHackMgr.process(outRom, ref context.workingOffset);
+			Logging.log("Done!");
+		}
+
+		public bool generate(byte[] origRom, byte[] outRom, String seed, RandoSettings settings)
         {
             RandoContext context = new RandoContext();
             string mode = settings.get(CommonSettings.PROPERTYNAME_MODE);
 
-			// Generalized Init Random Inits
-			initGenerate(seed, settings, context);
+			var (fileLogger, fileLoggerDebug, fileLoggerSpoiler) = preGenerate(seed, settings, context);
 
-            context.namesOfThings = new NamesOfThings(outRom);
-
-            context.originalRom = origRom;
-            context.outputRom = outRom;
-
-            // open log files
-            Logging fileLogger = null;
-            Logging fileLoggerSpoiler = null;
-            Logging fileLoggerDebug = null;
-
-            String filenameSeed = seed;
-            char[] badChars = new char[] { '\\', '/', ':', '<', '>', '\'', '\"', '*', '?', '|' };
-            foreach (char c in badChars)
-            {
-                filenameSeed = filenameSeed.Replace(c, '_');
-            }
-
-            if (settings.getBool(CommonSettings.PROPERTYNAME_RACE_MODE))
-            {
-                // advance randomness state up to 8 times.
-                // no clue if this is needed, once might be fine as well
-                int times = context.randomFunctional.Next(8);
-                for (; times > 0; times--) context.randomFunctional.Next();
-            }
-            Logging.ClearLoggers();
-            if (settings.getBool(CommonSettings.PROPERTYNAME_TEST_ONLY))
-            {
-                fileLogger = new DebugLogger();
-                fileLoggerSpoiler = new DebugLogger();
-                fileLoggerDebug = new DebugLogger();
-            }
-            else
-            {
-                fileLogger = new FileLogger("./log_" + filenameSeed + ".txt");
-                if (settings.getBool(CommonSettings.PROPERTYNAME_SPOILER_LOG) && !settings.getBool(CommonSettings.PROPERTYNAME_RACE_MODE))
-                {
-                    fileLoggerSpoiler = new FileLogger("./log_" + filenameSeed + "_SPOILER.txt");
-                }
-                else
-                {
-                    fileLoggerSpoiler = new NullWriter();
-                }
-                if (settings.getBool(CommonSettings.PROPERTYNAME_DEBUG_LOG))
-                {
-                    fileLoggerDebug = new FileLogger("./log_" + filenameSeed + "_DEBUG.txt");
-                }
-                else
-                {
-                    fileLoggerDebug = new NullWriter();
-                }
-            }
-            Logging.AddLogger(fileLogger);
-            Logging.AddLogger("spoiler", fileLoggerSpoiler);
-            Logging.AddLogger("debug", fileLoggerDebug);
-            Logging.AddLogger(fileLoggerDebug); // include general messages in the debug log, too
-            Logging.debugEnabled = true;
-
-            // log all the incoming settings, and seed
-            Logging.log("-------------------------------------------------");
-            Logging.log("Begin ROM generation at " + DateTime.Now + " with version " + settings.get(CommonSettings.PROPERTYNAME_VERSION));
-            Logging.log("Seed = " + seed);
-            Logging.log("Options = " + settings);
-            Logging.log("-------------------------------------------------");
-
-            try
+			try
             {
                 // main rom generation
                 generate(origRom, outRom, seed, settings, context);
-                // a few post-processing steps with data defined by the above
-                context.namesOfThings.setAllNames(outRom, ref context.workingOffset);
-                if (context.replacementEvents.Count > 0)
-                {
-                    EventExpander eventExpander = new EventExpander();
-                    eventExpander.process(outRom, context.replacementEvents, ref context.workingOffset);
-                }
-                if (context.replacementMapPieces.Count > 0)
-                {
-                    MapPieceExpander mapPieceExpander = new MapPieceExpander();
-                    mapPieceExpander.process(outRom, context.replacementMapPieces, ref context.workingOffset);
-                }
-                if (context.replacementDoors.Count > 0)
-                {
-                    DoorReplacer doorReplacer = new DoorReplacer();
-                    doorReplacer.process(outRom, context);
-                }
-                if(context.generatedMaps.Count > 0)
-                {
-                    FullMapReplacer fullMapReplacer = new FullMapReplacer();
-                    fullMapReplacer.process(outRom, context);
-                }
-                if(context.replacementMapPalettes.Count > 0)
-                {
-                    MapPaletteSetReplacer mapPaletteSetReplacer = new MapPaletteSetReplacer();
-                    mapPaletteSetReplacer.process(context);
-                }
+				// a few post-processing steps with data defined by the above
 
-                context.eventHackMgr.process(outRom, ref context.workingOffset);
-                Logging.log("Done!");
+				postGenerate(origRom, outRom, seed, settings, context);
+
                 return true;
             }
             catch(Exception e)
@@ -445,13 +453,24 @@ namespace SoMRandomizer.processing.common
         protected void applyHacks(byte[] origRom, byte[] outRom, String seed, RandoSettings settings, RandoContext context)
         {
             foreach(RandoProcessor commonHack in commonHacks)
-            {
-                commonHack.add(origRom, outRom, seed, settings, context);
+			{
+				commonHack.add(origRom, outRom, seed, settings, context);
             }
             foreach (RandoProcessor modeSpecificHack in modeSpecificHacks)
-            {
-                modeSpecificHack.add(origRom, outRom, seed, settings, context);
+			{
+				modeSpecificHack.add(origRom, outRom, seed, settings, context);
             }
         }
+
+		public void owPreApplyHacks(String seed, RandoSettings settings, RandoContext context)
+		{
+			var origRom = new byte[0];
+			var outRom = new byte[0];
+			foreach (RandoProcessor modeSpecificHack in modeSpecificHacks)
+			{
+				modeSpecificHack.add(origRom, outRom, seed, settings, context);
+			}
+			modeSpecificHacks.Clear();
+		}
     }
 }

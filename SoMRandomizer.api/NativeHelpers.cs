@@ -3,12 +3,23 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SoMRandomizer.config.settings;
 using SoMRandomizer.native;
+using SoMRandomizer.processing.common;
 using SoMRandomizer.processing.openworld.randomization;
 
 namespace SoMRandomizer.api
 {
-    public static class NativeHelpers
+	public class SoMRHub(string seed, OpenWorldSettings settings, RandoContext context, GenerateConfig config)
+	{
+		public string seed = seed;
+		public OpenWorldSettings settings = settings;
+		public RandoContext context = context;
+		public GenerateConfig config = config;
+	}
+
+	public static class NativeHelpers
     {
 		public static unsafe Dictionary<string, object> dataToDict<T>(List<T> inputData) where T : ISerializableObject
 		{
@@ -26,5 +37,5 @@ namespace SoMRandomizer.api
 		{
 			return Marshal.StringToHGlobalAnsi(JsonConvert.SerializeObject(input));
 		}
-    }
+	}
 }

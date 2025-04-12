@@ -34,12 +34,6 @@ namespace SoMRandomizer.processing.openworld
 		protected override bool process(byte[] origRom, byte[] outRom, string seed, RandoSettings settings, RandoContext context)
 		{
 			var out_bool = setStartingCharacter(seed, settings, context);
-			StringValueSettings working = context.workingData;
-			var startingChar = working.get(STARTING_CHARACTER);
-			if (startingChar != "boy")
-			{
-				new StartingCharacterRandomizer().add(origRom, outRom, seed, settings, context);
-			}
 			return true && out_bool;
 		}
 
@@ -49,7 +43,7 @@ namespace SoMRandomizer.processing.openworld
             StringValueSettings working = context.workingData;
             string startingChar = settings.get(OpenWorldSettings.PROPERTYNAME_STARTING_CHAR);
             //working.set(STARTING_CHARACTER, settings.get(OpenWorldSettings.PROPERTYNAME_STARTING_CHAR));
-            if (startingChar == "random")
+            if (startingChar == "chaos")
             {
                 int startingCharVal = r.Next() % 3;
                 switch (startingCharVal)

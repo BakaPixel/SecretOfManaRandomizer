@@ -1,5 +1,6 @@
 ﻿using SoMRandomizer.logging;
 using SoMRandomizer.processing.common;
+using System;
 using System.Collections.Generic;
 using static SoMRandomizer.processing.openworld.randomization.OpenWorldSimulator;
 
@@ -61,13 +62,13 @@ namespace SoMRandomizer.processing.openworld.randomization
             allLocationsLeft.AddRange(prizePlacements.Keys);
             // prize locations
             for (int cycleNum = 0; cycleNum < simulationResult.collectionCycles.Count; cycleNum++)
-            {
-                Logging.log("  Collection cycle:" + cycleNum, "spoiler");
+			{
+				Logging.log("  Collection cycle:" + cycleNum, "spoiler");
                 foreach (PrizeLocation prizeLocation in prizePlacements.Keys)
-                {
-                    if (simulationResult.collectionCycles[cycleNum].Contains(prizeLocation.locationName))
-                    {
-                        PrizeItem thisPrize = prizePlacements[prizeLocation];
+				{
+					if (simulationResult.collectionCycles[cycleNum].Contains(prizeLocation.locationName))
+					{
+						PrizeItem thisPrize = prizePlacements[prizeLocation];
                         Logging.log("    " + prizeLocation.locationName + " -> " + prizePlacements[prizeLocation].prizeName 
                             + " [event 0x" + prizeLocation.eventNum.ToString("X") 
                             + "] [flag 0x" + thisPrize.gotItemEventFlag.ToString("X") + "]", "spoiler");
@@ -112,10 +113,10 @@ namespace SoMRandomizer.processing.openworld.randomization
             if (spriteStartWeaponName != "")
             {
                 Logging.log("Sprite starting weapon = " + SomVanillaValues.weaponByteToName(spriteStarterWeapon), "spoiler");
-            }
+			}
 
-            // orb elements
-            Logging.log("[Orb elements]", "spoiler");
+			// orb elements
+			Logging.log("[Orb elements]", "spoiler");
             Logging.log("Element to open earth palace = " + (crystalOrbColorMap[ElementSwaps.ORBMAP_EARTHPALACE] != 0xFF ? SomVanillaValues.elementOrbByteToName(crystalOrbColorMap[ElementSwaps.ORBMAP_EARTHPALACE], false) : "none"), "spoiler");
             Logging.log("Element to open fire palace 1 = " + (crystalOrbColorMap[ElementSwaps.ORBMAP_FIREPALACE1] != 0xFF ? SomVanillaValues.elementOrbByteToName(crystalOrbColorMap[ElementSwaps.ORBMAP_FIREPALACE1], false) : "none"), "spoiler");
             Logging.log("Element to open fire palace 2 = " + (crystalOrbColorMap[ElementSwaps.ORBMAP_FIREPALACE2] != 0xFF ? SomVanillaValues.elementOrbByteToName(crystalOrbColorMap[ElementSwaps.ORBMAP_FIREPALACE2], false) : "none"), "spoiler");

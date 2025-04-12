@@ -28,7 +28,7 @@ namespace SoMRandomizer.processing.openworld.randomization
 
 		public static void initUID()
 		{
-			// Used mainly Python API to make sure the Random Generation returns expected results with multiple calls.
+			// Used mainly by Python API to make sure the Random Generation returns expected results with multiple calls.
 			PRIZE_UID = 0;
 		}
 

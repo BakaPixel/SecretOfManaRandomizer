@@ -40,7 +40,7 @@ namespace SoMRandomizer.processing.openworld
             List<string> randomClass = new string[] { "OGboy", "OGgirl", "OGsprite" }.ToList();
             List<string> randomUniqueClass = new string[] { "OGboy", "OGgirl", "OGsprite" }.ToList();
 
-            if (boyClass == "random")
+            if (boyClass == "chaos" )
             {
                 boyClass = randomClass[r.Next() % randomClass.Count];
             }
@@ -48,7 +48,7 @@ namespace SoMRandomizer.processing.openworld
             {
                 randomUniqueClass.Remove(boyClass);
             }
-            if (girlClass == "random")
+            if (girlClass == "chaos" )
             {
                 girlClass = randomClass[r.Next() % randomClass.Count];
             }
@@ -56,7 +56,7 @@ namespace SoMRandomizer.processing.openworld
             {
                 randomUniqueClass.Remove(girlClass);
             }
-            if (spriteClass == "random")
+            if (spriteClass == "chaos" )
             {
                 spriteClass = randomClass[r.Next() % randomClass.Count];
             }
@@ -102,21 +102,21 @@ namespace SoMRandomizer.processing.openworld
                 }
             }
 
-            Logging.log("Boy character role: " + boyClass, "spoiler");
-            Logging.log("Girl character role: " + girlClass, "spoiler");
-            Logging.log("Sprite character role: " + spriteClass, "spoiler");
+			Logging.log("Boy character role: " + boyClass, "spoiler");
+			Logging.log("Girl character role: " + girlClass, "spoiler");
+			Logging.log("Sprite character role: " + spriteClass, "spoiler");
 
             bool girlMagicExists = false;
             bool spriteMagicExists = false;
-            if ((working.getBool(OpenWorldCharacterSelection.BOY_EXISTS) && boyClass == "OGgirl") || 
-                (working.getBool(OpenWorldCharacterSelection.GIRL_EXISTS) && girlClass == "OGgirl") || 
-                (working.getBool(OpenWorldCharacterSelection.SPRITE_EXISTS) && spriteClass == "OGgirl"))
+            if ((working.getBool(OpenWorldCharacterSelection.BOY_EXISTS) && boyClass.ToLower() == "OGgirl".ToLower()) || 
+                (working.getBool(OpenWorldCharacterSelection.GIRL_EXISTS) && girlClass.ToLower() == "OGgirl".ToLower()) || 
+                (working.getBool(OpenWorldCharacterSelection.SPRITE_EXISTS) && spriteClass.ToLower() == "OGgirl".ToLower()))
             {
                 girlMagicExists = true;
             }
-            if ((working.getBool(OpenWorldCharacterSelection.BOY_EXISTS) && boyClass == "OGsprite") || 
-                (working.getBool(OpenWorldCharacterSelection.GIRL_EXISTS) && girlClass == "OGsprite") || 
-                (working.getBool(OpenWorldCharacterSelection.SPRITE_EXISTS) && spriteClass == "OGsprite"))
+            if ((working.getBool(OpenWorldCharacterSelection.BOY_EXISTS) && boyClass == "OGsprite".ToLower()) || 
+                (working.getBool(OpenWorldCharacterSelection.GIRL_EXISTS) && girlClass == "OGsprite".ToLower()) || 
+                (working.getBool(OpenWorldCharacterSelection.SPRITE_EXISTS) && spriteClass == "OGsprite".ToLower()))
             {
                 spriteMagicExists = true;
             }
@@ -128,6 +128,7 @@ namespace SoMRandomizer.processing.openworld
             working.setBool(GIRL_MAGIC_EXISTS, girlMagicExists);
             working.setBool(SPRITE_MAGIC_EXISTS, spriteMagicExists);
             working.setBool(ANY_MAGIC_EXISTS, girlMagicExists || spriteMagicExists);
+
             return true;
         }
     }

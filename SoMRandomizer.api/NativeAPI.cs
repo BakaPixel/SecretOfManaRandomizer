@@ -6,13 +6,53 @@ using SoMRandomizer.processing.openworld.randomization;
 using SoMRandomizer.processing.openworld;
 using SoMRandomizer.config.settings;
 using SoMRandomizer.processing.common;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Linq;
+using System.Collections;
+using System.IO;
+using System.Text;
 
 namespace SoMRandomizer.api;
 
 public static class NativeAPI
 {
+	private static ArrayList arrSoMRHubs = new ArrayList();
+
+	[UnmanagedCallersOnly(EntryPoint = "start_context")]
+	public static unsafe int start_context(IntPtr input)
+	{
+		var genConfig = Marshal.PtrToStructure<GenerateConfig>(input);
+		// create default settings and apply our overrides
+		CommonSettings commonSettings = new CommonSettings();
+		OpenWorldSettings openWorldSettings = new OpenWorldSettings(commonSettings);
+
+		// set a few common options for the log that the UI normally sets
+		commonSettings.set(CommonSettings.PROPERTYNAME_MODE, OpenWorldSettings.MODE_KEY);
+		commonSettings.set(CommonSettings.PROPERTYNAME_ALL_ENTERED_OPTIONS, genConfig.entries);
+		commonSettings.set(CommonSettings.PROPERTYNAME_VERSION, RomGenerator.VERSION_NUMBER);
+
+		openWorldSettings.processNewSettings(genConfig.getEntries());
+		RandoContext context = new RandoContext();
+
+		var gen = new OpenWorldGenerator();
+		StartingWeaponRandomizer.setStartingWeapons(openWorldSettings, context);
+
+		gen.owFirstHacks();
+		RomGenerator.preGenerate(genConfig.seed, openWorldSettings, context);
+		gen.owPreApplyHacks(genConfig.seed, openWorldSettings, context);
+		List<PrizeLocation> lpl = OpenWorldLocations.getForSelectedOptions(openWorldSettings, context);
+		List<PrizeItem> lpi = OpenWorldPrizes.getForSelectedOptions(openWorldSettings, context, lpl);
+
+		context.owAllLocations = lpl;
+		context.owAllPrizes = lpi;
+		context.genStart = "AP";
+		context.owGenerator = gen;
+
+		arrSoMRHubs.Add(new SoMRHub(genConfig.seed, openWorldSettings ,context, genConfig));
+
+		return arrSoMRHubs.Count - 1;
+	}
+
 	[UnmanagedCallersOnly(EntryPoint = "get_items")]
 	public static unsafe IntPtr get_items()
 	{
@@ -27,25 +67,16 @@ public static class NativeAPI
 	}
 
 	[UnmanagedCallersOnly(EntryPoint = "get_locations")]
-    public static unsafe IntPtr get_locations()
-    {
-		var locationArray = OpenWorldLocations.getAllLocations();
+	public static unsafe IntPtr get_locations()
+	{
+		var itemsArray = OpenWorldLocations.getAllLocations();
 		Dictionary<string, object> dictOut = new Dictionary<string, object> { };
 		dictOut.Add("list", new List<Dictionary<string, object>>());
-		foreach (ISerializableObject value in locationArray)
+		foreach (ISerializableObject value in itemsArray)
 		{
 			(dictOut["list"] as List<Dictionary<string, object>>).Add(value.toDict());
 		}
-
 		return NativeHelpers.ObjectToIntPtr(dictOut);
-	}
-    
-
-	[UnmanagedCallersOnly(EntryPoint = "get_settings")]
-	public static int get_settings()
-	{
-		Console.WriteLine("TEST - blank");
-		return 3;
 	}
 
 	[UnmanagedCallersOnly(EntryPoint = "somr_receive_item")]
@@ -59,69 +90,32 @@ public static class NativeAPI
 		Console.WriteLine($"Received id: {testInput.id}");
 	}
 
-	[UnmanagedCallersOnly(EntryPoint = "somr_receive_location")]
-	public static unsafe void somr_receive_location(IntPtr input)
-	{
-		// Print the data to verify
-		Location testInput = Marshal.PtrToStructure<Location>(input);
-		Console.WriteLine("Location Received");
-		Console.WriteLine($"Received Name: {testInput.Name}");
-		Console.WriteLine($"Received Type: {testInput.Type}");
-	}
-
 	[UnmanagedCallersOnly(EntryPoint = "get_setting_locations")]
-	public static unsafe IntPtr get_setting_locations(IntPtr input)
+	public static unsafe IntPtr get_setting_locations(int input)
 	{
-		var marshaled = Marshal.PtrToStringAnsi(input);
+		if (input >= 0 && input < arrSoMRHubs.Count)
+		{
+			SoMRHub hub = (SoMRHub)arrSoMRHubs[input];
 
-		Dictionary<string, object> dict = JObject.Parse(marshaled).ToObject<Dictionary<string, object>>();
-		Dictionary<string, string> entries = (dict["entries"] as JObject).ToObject<Dictionary<string, string>>();
+			var dictOut = NativeHelpers.dataToDict(hub.context.owAllLocations);
 
-		// create default settings and apply our overrides
-		CommonSettings commonSettings = new CommonSettings();
-		OpenWorldSettings openWorldSettings = new OpenWorldSettings(commonSettings);
-		// set a few common options for the log that the UI normally sets
-		commonSettings.set(CommonSettings.PROPERTYNAME_MODE, OpenWorldSettings.MODE_KEY);
-		commonSettings.set(CommonSettings.PROPERTYNAME_ALL_ENTERED_OPTIONS, marshaled);
-		commonSettings.set(CommonSettings.PROPERTYNAME_VERSION, RomGenerator.VERSION_NUMBER);
-
-		openWorldSettings.processNewSettings(entries);
-		RandoContext rc = new RandoContext();
-		List<PrizeLocation> lpl = OpenWorldLocations.getForSelectedOptions(openWorldSettings, rc);
-		var dictOut = NativeHelpers.dataToDict(lpl);
-
-		return NativeHelpers.ObjectToIntPtr(dictOut);
+			return NativeHelpers.ObjectToIntPtr(dictOut);
+		}
+		throw new Exception($"Invalid Index: {input}");
 	}
 
 	[UnmanagedCallersOnly(EntryPoint = "get_setting_items")]
-	public static unsafe IntPtr get_setting_items(IntPtr input)
+	public static unsafe IntPtr get_setting_items(int input)
 	{
-		var marshaled = Marshal.PtrToStringAnsi(input);
+		if (input >= 0 && input < arrSoMRHubs.Count)
+		{
+			SoMRHub hub = (SoMRHub)arrSoMRHubs[input];
 
-		Dictionary<string, object> dict = JObject.Parse(marshaled).ToObject<Dictionary<string, object>>();
-		Dictionary<string, string> entries = (dict["entries"] as JObject).ToObject<Dictionary<string, string>>();
-		string seed = dict["seed"] as string;
+			var dictOut = NativeHelpers.dataToDict(hub.context.owAllPrizes);
 
-		// create default settings and apply our overrides
-		CommonSettings commonSettings = new CommonSettings();
-		OpenWorldSettings openWorldSettings = new OpenWorldSettings(commonSettings);
-
-		// set a few common options for the log that the UI normally sets
-		commonSettings.set(CommonSettings.PROPERTYNAME_MODE, OpenWorldSettings.MODE_KEY);
-		commonSettings.set(CommonSettings.PROPERTYNAME_ALL_ENTERED_OPTIONS, marshaled);
-		commonSettings.set(CommonSettings.PROPERTYNAME_VERSION, RomGenerator.VERSION_NUMBER);
-
-		openWorldSettings.processNewSettings(entries);
-		RandoContext context = new RandoContext();
-		RomGenerator.initGenerate(seed, openWorldSettings, context);
-		StartingWeaponRandomizer.setStartingWeapons(openWorldSettings, context);
-		OpenWorldCharacterSelection.setStartingCharacter(seed, openWorldSettings, context);
-		List<PrizeLocation> lpl = OpenWorldLocations.getForSelectedOptions(openWorldSettings, context);
-		List<PrizeItem> lpi = OpenWorldPrizes.getForSelectedOptions(openWorldSettings, context, lpl);
-
-		var dictOut = NativeHelpers.dataToDict(lpi);
-
-		return NativeHelpers.ObjectToIntPtr(dictOut);
+			return NativeHelpers.ObjectToIntPtr(dictOut);
+		}
+		throw new Exception($"Invalid Index: {input}");
 	}
 
 	[UnmanagedCallersOnly(EntryPoint = "free_ptr_memory")]
@@ -142,41 +136,31 @@ public static class NativeAPI
 	[UnmanagedCallersOnly(EntryPoint = "generate_rom")]
 	public static unsafe int generate_rom(IntPtr input)
 	{
-		// Dereference the pointer to the GenerateConfig struct
-		var marshaled = Marshal.PtrToStringAnsi(input);
+		var gen = Marshal.PtrToStructure<GenerateAP>(input);
 
-		Dictionary<string, object> dict = JObject.Parse(marshaled).ToObject<Dictionary<string, object>>();
-		Dictionary<string, string> entries = (dict["entries"] as JObject).ToObject<Dictionary<string, string>>();
-
-		// Print the dictionary contents
-		foreach (var kvp in dict)
+		if (gen.SoMRHubIndex >= 0 && gen.SoMRHubIndex < arrSoMRHubs.Count)
 		{
-			Console.WriteLine($"{kvp.Key}: {kvp.Value}");
-		}
+			SoMRHub hub = (SoMRHub)arrSoMRHubs[gen.SoMRHubIndex];
 
-		// create default settings and apply our overrides
-		CommonSettings commonSettings = new CommonSettings();
-		OpenWorldSettings openWorldSettings = new OpenWorldSettings(commonSettings);
-		// set a few common options for the log that the UI normally sets
-		commonSettings.set(CommonSettings.PROPERTYNAME_MODE, OpenWorldSettings.MODE_KEY);
-		commonSettings.set(CommonSettings.PROPERTYNAME_ALL_ENTERED_OPTIONS, marshaled);
-		commonSettings.set(CommonSettings.PROPERTYNAME_VERSION, RomGenerator.VERSION_NUMBER);
+			hub.context.owAllPrizes = gen.GetPrizeItems();
+			hub.context.owAllLocations = gen.GetPrizeLocations();
 
-		openWorldSettings.processNewSettings(entries);
-		OpenWorldGenerator openWorldGenerator = new OpenWorldGenerator();
-		Dictionary<string, RomGenerator> generatorsByRomType = new Dictionary<string, RomGenerator> { { OpenWorldSettings.MODE_KEY, openWorldGenerator } };
-		Dictionary<string, RandoSettings> settingsByRomType = new Dictionary<string, RandoSettings> { { OpenWorldSettings.MODE_KEY, openWorldSettings } };
-		// run rom generation
-		// note there are no checks here for whether the dstRom exists - it will overwrite
-		try
-		{
-			RomGenerator.initGeneration(dict["sourcePath"] as string, dict["destPath"] as string, dict["seed"] as string, generatorsByRomType, commonSettings, settingsByRomType);
-			Console.WriteLine("done!");
+			// run rom generation
+			// note there are no checks here for whether the dstRom exists - it will overwrite
+			try
+			{
+				var (origRom, outRom) = RomGenerator.initRomFiles(gen.sourcePath, gen.destPath);
+				hub.context.owGenerator.owSecondHacks();
+				hub.context.owGenerator.owGenerate(origRom, outRom, hub.seed, hub.settings, hub.context);
+				File.WriteAllBytes(gen.destPath, outRom);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Error: " + e.Message);
+			}
+			arrSoMRHubs[gen.SoMRHubIndex] = null;
+			return 1;
 		}
-		catch (Exception e)
-		{
-			Console.WriteLine("Error: " + e.Message);
-		}
-		return 1;
+		throw new Exception($"Invalid Config: {input}");
 	}
 }

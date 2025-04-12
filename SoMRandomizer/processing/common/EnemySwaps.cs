@@ -61,7 +61,7 @@ namespace SoMRandomizer.processing.common
                     new NoEnemies().add(origRom, outRom, seed, settings, context);
                     return false;
                 }
-                else if(enemyRandoType.Contains("random"))
+                else if(enemyRandoType.Contains("chaos"))
                 {
                     Logging.log("Skipping enemy rando; random spawns selected");
                     new EnemyRandomizer().add(origRom, outRom, seed, settings, context);
@@ -319,7 +319,7 @@ namespace SoMRandomizer.processing.common
 
             List<int> statusTypeList = new List<int>();
 
-            if (statusConditionType.StartsWith("random"))
+            if (statusConditionType.StartsWith("chaos" ))
             {
                 // 83 total enemies, we'll call it 90 to account for some overlap
                 int totalEnemies = 90; // decrease this for harder mode
@@ -409,7 +409,7 @@ namespace SoMRandomizer.processing.common
                     outRom[0x101000 + newW2 * 12 + i] = origRom[0x101000 + oldW2 * 12 + i];
                 }
 
-                if(statusConditionType.StartsWith("random"))
+                if(statusConditionType.StartsWith("chaos" ))
                 {
                     // for every enemy, just pick a random element out of statusTypeList
                     int randomStatus = statusTypeList[(r.Next() % statusTypeList.Count)];
@@ -439,7 +439,7 @@ namespace SoMRandomizer.processing.common
                     outRom[0x101000 + newW2 * 12 + i] = origRom[0x101000 + oldW2 * 12 + i];
                 }
 
-                if (statusConditionType.StartsWith("random"))
+                if (statusConditionType.StartsWith("chaos" ))
                 {
                     // for every enemy, just pick a random element out of statusTypeList
                     int randomStatus = statusTypeList[(r.Next() % statusTypeList.Count)];

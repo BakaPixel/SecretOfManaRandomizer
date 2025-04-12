@@ -46,8 +46,8 @@ namespace SoMRandomizer.processing
         }
 
         public static Dictionary<int, byte> getCrystalOrbElementMap(RandoContext context)
-        {
-            List<string> elementOrbSettings = context.workingData.keysStartingWith(ORBELEMENT_PREFIX);
+		{
+			List<string> elementOrbSettings = context.workingData.keysStartingWith(ORBELEMENT_PREFIX);
             Dictionary<int, byte> elementValuesByMapNum = new Dictionary<int, byte>();
             foreach (string key in elementOrbSettings)
             {
@@ -78,11 +78,12 @@ namespace SoMRandomizer.processing
                 Dictionary<int, byte> crystalOrbElementMap = new Dictionary<int, byte>();
                 bool randomizeGrandPalace = settings.getBool(OpenWorldSettings.PROPERTYNAME_RANDOMIZE_GRANDPALACE_ELEMENTS);
                 bool flammieDrumInLogic = settings.getBool(OpenWorldSettings.PROPERTYNAME_FLAMMIE_DRUM_IN_LOGIC);
-                processOpenWorld(outRom, context.randomFunctional, crystalOrbElementMap, context.replacementEvents, girlMagicExists, spriteMagicExists, randomizeGrandPalace, context.plandoSettings, flammieDrumInLogic);
+				planOpenWorld(context.randomFunctional, crystalOrbElementMap, girlMagicExists, spriteMagicExists, randomizeGrandPalace, context.plandoSettings, flammieDrumInLogic);
                 foreach(int mapNum in crystalOrbElementMap.Keys)
                 {
                     context.workingData.setInt(ORBELEMENT_PREFIX + mapNum, crystalOrbElementMap[mapNum]);
                 }
+				context.crystalOrbElementMap = crystalOrbElementMap;
             }
             else
             {
@@ -257,394 +258,180 @@ namespace SoMRandomizer.processing
             return newEles;
         }
 
-        // for open world, set the orb elements to whatever was randomized for them.
-        // don't swap spell rewards to match like in vanilla rando; randomized prize locations & logic will determine a new path through them
-        public void processOpenWorld(byte[] rom, Random r, Dictionary<int, byte> crystalOrbColorMap, Dictionary<int, List<byte>> replacementEvents, bool girlExists, bool spriteExists, bool randomizeGrandPalace, Dictionary<string, List<string>> plando, bool flammieDrumInLogic)
-        {
-            // note that lumina and sylphid seem like they've been swapped in vanilla and no one ever noticed?
-            // 358 gnome = 81
-            // 359 undine = 82
-            // 35a sylphid = 84
-            // 35b salamando = 83
-            // 35c lumina = 85
-            // 35d shade = 86
-            // 35e luna = 87
-            // 35f dryad = 88
 
-            // x81->x350 = gnome
-            // x82->x351 = undine
-            // x83->x353 = salamando
-            // x84->x354 = lumina
-            // x85->x352 = sylphid
-            // x86->x355 = shade
-            // x87->x356 = luna
-            // x88->x357 = dryad
-            List<byte> orbElementsAvailable = GetValidOrbElements(girlExists, spriteExists);
+		public void planOpenWorld(Random r, Dictionary<int, byte> crystalOrbColorMap, bool girlExists, bool spriteExists, bool randomizeGrandPalace, Dictionary<string, List<string>> plando, bool flammieDrumInLogic)
+		{
+			List<byte> orbElementsAvailable = GetValidOrbElements(girlExists, spriteExists);
 
-            // boy only - remove these switches in event modifier and just set them all to none
-            if(orbElementsAvailable.Count == 0)
-            {
-                orbElementsAvailable.Add(0xFF);
-            }
+			// boy only - remove these switches in event modifier and just set them all to none
+			if (orbElementsAvailable.Count == 0)
+			{
+				orbElementsAvailable.Add(0xFF);
+			}
 
-            // gnome orb to open matango cave
-            if (plando.ContainsKey(KEY_MATANGO_ORB_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_MATANGO] = SomVanillaValues.elementOrbNameToByte(plando[KEY_MATANGO_ORB_ELEMENT][0]);
-            }
-            else
-            {
-                crystalOrbColorMap[ORBMAP_MATANGO] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-            }
+			// gnome orb to open matango cave
+			if (plando.ContainsKey(KEY_MATANGO_ORB_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_MATANGO] = SomVanillaValues.elementOrbNameToByte(plando[KEY_MATANGO_ORB_ELEMENT][0]);
+			}
+			else
+			{
+				crystalOrbColorMap[ORBMAP_MATANGO] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+			}
 
-            // undine orb to open earth palace
-            if (plando.ContainsKey(KEY_EARTH_PALACE_ORB_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_EARTHPALACE] = SomVanillaValues.elementOrbNameToByte(plando[KEY_EARTH_PALACE_ORB_ELEMENT][0]);
-            }
-            else
-            {
-                crystalOrbColorMap[ORBMAP_EARTHPALACE] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-            }
+			// undine orb to open earth palace
+			if (plando.ContainsKey(KEY_EARTH_PALACE_ORB_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_EARTHPALACE] = SomVanillaValues.elementOrbNameToByte(plando[KEY_EARTH_PALACE_ORB_ELEMENT][0]);
+			}
+			else
+			{
+				crystalOrbColorMap[ORBMAP_EARTHPALACE] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+			}
 
-            // undine orb to open end of fire palace
-            if (plando.ContainsKey(KEY_FIRE_PALACE_ORB_3_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_FIREPALACE3] = SomVanillaValues.elementOrbNameToByte(plando[KEY_FIRE_PALACE_ORB_3_ELEMENT][0]);
-            }
-            else
-            {
-                crystalOrbColorMap[ORBMAP_FIREPALACE3] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-            }
+			// undine orb to open end of fire palace
+			if (plando.ContainsKey(KEY_FIRE_PALACE_ORB_3_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_FIREPALACE3] = SomVanillaValues.elementOrbNameToByte(plando[KEY_FIRE_PALACE_ORB_3_ELEMENT][0]);
+			}
+			else
+			{
+				crystalOrbColorMap[ORBMAP_FIREPALACE3] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+			}
 
-            // salamando orb to open fire palace -- should remove palette change here so we can see what fucking color it is
-            // ^^ OpenWorldSupportingEvents does this now; event 0x63d
-            if (plando.ContainsKey(KEY_FIRE_PALACE_ORB_1_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_FIREPALACE1] = SomVanillaValues.elementOrbNameToByte(plando[KEY_FIRE_PALACE_ORB_1_ELEMENT][0]);
-            }
-            else
-            {
-                crystalOrbColorMap[ORBMAP_FIREPALACE1] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-            }
+			// salamando orb to open fire palace -- should remove palette change here so we can see what fucking color it is
+			// ^^ OpenWorldSupportingEvents does this now; event 0x63d
+			if (plando.ContainsKey(KEY_FIRE_PALACE_ORB_1_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_FIREPALACE1] = SomVanillaValues.elementOrbNameToByte(plando[KEY_FIRE_PALACE_ORB_1_ELEMENT][0]);
+			}
+			else
+			{
+				crystalOrbColorMap[ORBMAP_FIREPALACE1] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+			}
 
-            // salamando orb to continue through fire palace
-            if (plando.ContainsKey(KEY_FIRE_PALACE_ORB_2_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_FIREPALACE2] = SomVanillaValues.elementOrbNameToByte(plando[KEY_FIRE_PALACE_ORB_2_ELEMENT][0]);
-            }
-            else
-            {
-                crystalOrbColorMap[ORBMAP_FIREPALACE2] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-            }
+			// salamando orb to continue through fire palace
+			if (plando.ContainsKey(KEY_FIRE_PALACE_ORB_2_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_FIREPALACE2] = SomVanillaValues.elementOrbNameToByte(plando[KEY_FIRE_PALACE_ORB_2_ELEMENT][0]);
+			}
+			else
+			{
+				crystalOrbColorMap[ORBMAP_FIREPALACE2] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+			}
 
-            // lumina orb to get through luna palace
-            if (plando.ContainsKey(KEY_LUNA_PALACE_ORB_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_LUNAPALACE] = SomVanillaValues.elementOrbNameToByte(plando[KEY_LUNA_PALACE_ORB_ELEMENT][0]);
-            }
-            else
-            {
-                crystalOrbColorMap[ORBMAP_LUNAPALACE] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-            }
+			// lumina orb to get through luna palace
+			if (plando.ContainsKey(KEY_LUNA_PALACE_ORB_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_LUNAPALACE] = SomVanillaValues.elementOrbNameToByte(plando[KEY_LUNA_PALACE_ORB_ELEMENT][0]);
+			}
+			else
+			{
+				crystalOrbColorMap[ORBMAP_LUNAPALACE] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+			}
 
-            // sunken continent orbs in the 8 colored rooms; these will likely not be randomized
-            crystalOrbColorMap[ORBMAP_GRANDPALACE1] = (byte)(spriteExists ? 0x81 : 0x84); // gnome
-            crystalOrbColorMap[ORBMAP_GRANDPALACE2] = (byte)(spriteExists ? 0x82 : 0x84); // undine
-            crystalOrbColorMap[ORBMAP_GRANDPALACE3] = (byte)(0x85); // sylphid
-            crystalOrbColorMap[ORBMAP_GRANDPALACE4] = (byte)(0x83); // sala
-            crystalOrbColorMap[ORBMAP_GRANDPALACE5] = (byte)(girlExists ? 0x84 : 0x86); // lumina
-            crystalOrbColorMap[ORBMAP_GRANDPALACE6] = (byte)(spriteExists ? 0x86 : 0x84); // shade
-            crystalOrbColorMap[ORBMAP_GRANDPALACE7] = (byte)(spriteExists ? 0x87 : 0x84); // luna
+			// sunken continent orbs in the 8 colored rooms; these will likely not be randomized
+			crystalOrbColorMap[ORBMAP_GRANDPALACE1] = (byte)(spriteExists ? 0x81 : 0x84); // gnome
+			crystalOrbColorMap[ORBMAP_GRANDPALACE2] = (byte)(spriteExists ? 0x82 : 0x84); // undine
+			crystalOrbColorMap[ORBMAP_GRANDPALACE3] = (byte)(0x85); // sylphid
+			crystalOrbColorMap[ORBMAP_GRANDPALACE4] = (byte)(0x83); // sala
+			crystalOrbColorMap[ORBMAP_GRANDPALACE5] = (byte)(girlExists ? 0x84 : 0x86); // lumina
+			crystalOrbColorMap[ORBMAP_GRANDPALACE6] = (byte)(spriteExists ? 0x86 : 0x84); // shade
+			crystalOrbColorMap[ORBMAP_GRANDPALACE7] = (byte)(spriteExists ? 0x87 : 0x84); // luna
 
-            // sylphid orb in upper land overworld
-            crystalOrbColorMap[ORBMAP_UPPERLAND] = 0xFF;
-            if (flammieDrumInLogic)
-            {
-                if (plando.ContainsKey(KEY_UPPER_LAND_ORB_ELEMENT))
-                {
-                    crystalOrbColorMap[ORBMAP_UPPERLAND] = SomVanillaValues.elementOrbNameToByte(plando[KEY_UPPER_LAND_ORB_ELEMENT][0]);
-                }
-                else
-                {
-                    // upper land one
-                    crystalOrbColorMap[ORBMAP_UPPERLAND] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-                }
-            }
+			// sylphid orb in upper land overworld
+			crystalOrbColorMap[ORBMAP_UPPERLAND] = 0xFF;
+			if (flammieDrumInLogic)
+			{
+				if (plando.ContainsKey(KEY_UPPER_LAND_ORB_ELEMENT))
+				{
+					crystalOrbColorMap[ORBMAP_UPPERLAND] = SomVanillaValues.elementOrbNameToByte(plando[KEY_UPPER_LAND_ORB_ELEMENT][0]);
+				}
+				else
+				{
+					// upper land one
+					crystalOrbColorMap[ORBMAP_UPPERLAND] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+				}
+			}
 
-            if(plando.ContainsKey(KEY_GRAND_PALACE_ORB_1_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_GRANDPALACE1] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_1_ELEMENT][0]);
-            }
-            if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_2_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_GRANDPALACE2] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_2_ELEMENT][0]);
-            }
-            if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_3_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_GRANDPALACE3] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_3_ELEMENT][0]);
-            }
-            if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_4_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_GRANDPALACE4] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_4_ELEMENT][0]);
-            }
-            if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_5_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_GRANDPALACE5] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_5_ELEMENT][0]);
-            }
-            if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_6_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_GRANDPALACE6] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_6_ELEMENT][0]);
-            }
-            if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_7_ELEMENT))
-            {
-                crystalOrbColorMap[ORBMAP_GRANDPALACE7] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_7_ELEMENT][0]);
-            }
+			if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_1_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_GRANDPALACE1] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_1_ELEMENT][0]);
+			}
+			if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_2_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_GRANDPALACE2] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_2_ELEMENT][0]);
+			}
+			if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_3_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_GRANDPALACE3] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_3_ELEMENT][0]);
+			}
+			if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_4_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_GRANDPALACE4] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_4_ELEMENT][0]);
+			}
+			if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_5_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_GRANDPALACE5] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_5_ELEMENT][0]);
+			}
+			if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_6_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_GRANDPALACE6] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_6_ELEMENT][0]);
+			}
+			if (plando.ContainsKey(KEY_GRAND_PALACE_ORB_7_ELEMENT))
+			{
+				crystalOrbColorMap[ORBMAP_GRANDPALACE7] = SomVanillaValues.elementOrbNameToByte(plando[KEY_GRAND_PALACE_ORB_7_ELEMENT][0]);
+			}
 
-            if (randomizeGrandPalace)
-            {
-                Dictionary<byte, byte> palSets = new Dictionary<byte, byte>();
-                palSets[0x81] = 89;
-                palSets[0x82] = 88;
-                palSets[0x83] = 91;
-                palSets[0x84] = 93;
-                palSets[0x85] = 47;
-                palSets[0x86] = 92;
-                palSets[0x87] = 95;
-                palSets[0x88] = 97;
-                palSets[0xFF] = 0xFF;
-                
-                if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_1_ELEMENT))
-                {
-                    crystalOrbColorMap[ORBMAP_GRANDPALACE1] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-                }
-                rom[0x8DD19] = (byte)(0x80 + palSets[crystalOrbColorMap[ORBMAP_GRANDPALACE1]]);
+			if (randomizeGrandPalace)
+			{
+				Dictionary<byte, byte> palSets = new Dictionary<byte, byte>();
+				palSets[0x81] = 89;
+				palSets[0x82] = 88;
+				palSets[0x83] = 91;
+				palSets[0x84] = 93;
+				palSets[0x85] = 47;
+				palSets[0x86] = 92;
+				palSets[0x87] = 95;
+				palSets[0x88] = 97;
+				palSets[0xFF] = 0xFF;
 
-                if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_2_ELEMENT))
-                {
-                    crystalOrbColorMap[ORBMAP_GRANDPALACE2] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-                }
-                rom[0x8DD41] = (byte)(0x80 + palSets[crystalOrbColorMap[ORBMAP_GRANDPALACE2]]);
+				if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_1_ELEMENT))
+				{
+					crystalOrbColorMap[ORBMAP_GRANDPALACE1] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+				}
 
-                if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_3_ELEMENT))
-                {
-                    crystalOrbColorMap[ORBMAP_GRANDPALACE3] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-                }
-                rom[0x8DD69] = (byte)(0x80 + palSets[crystalOrbColorMap[ORBMAP_GRANDPALACE3]]);
+				if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_2_ELEMENT))
+				{
+					crystalOrbColorMap[ORBMAP_GRANDPALACE2] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+				}
 
-                if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_4_ELEMENT))
-                {
-                    crystalOrbColorMap[ORBMAP_GRANDPALACE4] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-                }
-                rom[0x8DD91] = (byte)(0x80 + palSets[crystalOrbColorMap[ORBMAP_GRANDPALACE4]]);
+				if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_3_ELEMENT))
+				{
+					crystalOrbColorMap[ORBMAP_GRANDPALACE3] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+				}
 
-                if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_5_ELEMENT))
-                {
-                    crystalOrbColorMap[ORBMAP_GRANDPALACE5] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-                }
-                rom[0x8DDB9] = (byte)(0x80 + palSets[crystalOrbColorMap[ORBMAP_GRANDPALACE5]]);
+				if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_4_ELEMENT))
+				{
+					crystalOrbColorMap[ORBMAP_GRANDPALACE4] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+				}
 
-                if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_6_ELEMENT))
-                {
-                    crystalOrbColorMap[ORBMAP_GRANDPALACE6] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-                }
-                rom[0x8DDE1] = (byte)(0x80 + palSets[crystalOrbColorMap[ORBMAP_GRANDPALACE6]]);
+				if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_5_ELEMENT))
+				{
+					crystalOrbColorMap[ORBMAP_GRANDPALACE5] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+				}
 
-                if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_7_ELEMENT))
-                {
-                    crystalOrbColorMap[ORBMAP_GRANDPALACE7] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
-                }
-                rom[0x8DE09] = (byte)(0x80 + palSets[crystalOrbColorMap[ORBMAP_GRANDPALACE7]]);
-            }
+				if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_6_ELEMENT))
+				{
+					crystalOrbColorMap[ORBMAP_GRANDPALACE6] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+				}
 
-            // x81->x350 = gnome
-            // x82->x351 = undine
-            // x83->x353 = salamando
-            // x84->x354 = lumina
-            // x85->x352 = sylphid
-            // x86->x355 = shade
-            // x87->x356 = luna
-            // x88->x357 = dryad
-            int[] eventConversions = new int[] { 0, 1, 3, 4, 2, 5, 6, 7 };
-
-
-            // event types 4E and 49
-            // they check analyzer in there too; should be able to use that as a template
-            int spellId = 0;
-            int[] spellIds = new int[] {
-                0, 1, 2, 3, 4, 5, // gnome
-                6, 7, 8, 9, 10, 11, // undine
-                18, 19, 20, 21, 22, 23, // sylphid
-                12, 13, 14, 15, 16, 17, // salamando
-                39, 40, 41, // lumina
-                36, 37, 38, // shade
-                24, 25, 26, 27, 28, 29, // luna
-                30, 31, 32, 33, 34, 35, // dryad
-            };
-            for(int i=0; i < 8; i++)
-            {
-                EventScript ev = new EventScript();
-                replacementEvents[0x350 + i] = ev;
-                // orb animation
-                ev.Add(EventCommandEnum.CHARACTER_ANIM.Value);
-                ev.Add(0x04);
-                ev.Add(0x80);
-                // wait for animation
-                ev.Add(EventCommandEnum.WAIT_FOR_ANIM.Value);
-
-                // set flag to 1 initially
-                ev.SetFlag((byte)(0x98 + i), 1);
-                // break out if acceptable spells
-                int max = 6;
-                if(i == 4 || i == 5)
-                {
-                    // shade, lumina
-                    max = 3;
-                }
-
-                for (int j=0; j < max; j++)
-                {
-                    // allow selected (all) spells
-                    ev.Add(0x4E);
-                    ev.Add(0x04);
-                    ev.Add(0x81);
-                    ev.Add((byte)spellIds[spellId]);
-                    ev.Add(0x02);
-                    ev.Add(0x01);
-                    spellId++;
-                }
-
-                // set flag to 0, didn't find correct spell
-                ev.SetFlag((byte)(0x98 + i), 0);
-                ev.Return();
-                ev.End();
-            }
-
-            // gnome orb; matango cave
-            if (crystalOrbColorMap[ORBMAP_MATANGO] != 0xFF)
-            {
-                EventScript ev27e = new EventScript();
-                replacementEvents[0x27e] = ev27e;
-                ev27e.Jsr(0x350 + eventConversions[crystalOrbColorMap[ORBMAP_MATANGO] - 0x81]); // change to check element we want
-                ev27e.Logic(EventFlags.MATANGO_PROGRESS_FLAG, 0x4, 0xF, EventScript.GetJumpCmd(0));
-                ev27e.Logic((byte)(0x98 + eventConversions[crystalOrbColorMap[ORBMAP_MATANGO] - 0x81]), 0x1, 0x3, EventScript.GetJumpCmd(0x27c)); // change to any spell acceptable (1-3)
-                ev27e.Jsr(0x799); // idk sound maybe
-                ev27e.End();
-            }
-
-            // undine orb; gaia's navel
-            if (crystalOrbColorMap[ORBMAP_EARTHPALACE] != 0xFF)
-            {
-                EventScript ev239 = new EventScript();
-                replacementEvents[0x239] = ev239;
-                ev239.Jsr(0x350 + eventConversions[crystalOrbColorMap[ORBMAP_EARTHPALACE] - 0x81]); // change to check element we want
-                ev239.Logic(EventFlags.EARTHPALACE_FLAG, 0x2, 0xF, EventScript.GetJumpCmd(0));
-                ev239.Logic((byte)(0x98 + eventConversions[crystalOrbColorMap[ORBMAP_EARTHPALACE] - 0x81]), 0x1, 0x3, EventScript.GetJumpCmd(0x38)); // change to any spell acceptable (1-3)
-                ev239.End();
-            }
-
-            // undine orb; end of fire palace
-            if (crystalOrbColorMap[ORBMAP_FIREPALACE3] != 0xFF)
-            {
-                EventScript ev6ce = new EventScript();
-                replacementEvents[0x6ce] = ev6ce;
-                ev6ce.Jsr(0x350 + eventConversions[crystalOrbColorMap[ORBMAP_FIREPALACE3] - 0x81]); // change to check element we want
-                ev6ce.Logic((byte)(0x98 + eventConversions[crystalOrbColorMap[ORBMAP_FIREPALACE3] - 0x81]), 0x1, 0x3, EventScript.GetJumpCmd(0x6c7)); // change to any spell acceptable (1-3)
-                ev6ce.End();
-            }
-
-            // fire palace entrance salamando orb
-            if (crystalOrbColorMap[ORBMAP_FIREPALACE1] != 0xFF)
-            {
-                EventScript ev2c8 = new EventScript();
-                replacementEvents[0x2c8] = ev2c8;
-                ev2c8.Jsr(0x350 + eventConversions[crystalOrbColorMap[ORBMAP_FIREPALACE1] - 0x81]); // change to check element we want
-                ev2c8.Logic((byte)(0x98 + eventConversions[crystalOrbColorMap[ORBMAP_FIREPALACE1] - 0x81]), 0x1, 0x3, EventScript.GetJumpCmd(0x2c9)); // change to any spell acceptable (1-3)
-                ev2c8.End();
-            }
-
-            // salamando orb; middle of fire palace
-            if (crystalOrbColorMap[ORBMAP_FIREPALACE2] != 0xFF)
-            {
-                EventScript ev6cb = new EventScript();
-                replacementEvents[0x6cb] = ev6cb;
-                ev6cb.Jsr(0x350 + eventConversions[crystalOrbColorMap[ORBMAP_FIREPALACE2] - 0x81]); // change to check element we want
-                ev6cb.Logic((byte)(0x98 + eventConversions[crystalOrbColorMap[ORBMAP_FIREPALACE2] - 0x81]), 0x1, 0x3, EventScript.GetJumpCmd(0x6ca)); // change to any spell acceptable (1-3)
-                ev6cb.End();
-            }
-
-            // lumina orb; luna palace
-            if (crystalOrbColorMap[ORBMAP_LUNAPALACE] != 0xFF)
-            {
-                EventScript ev2c4 = new EventScript();
-                replacementEvents[0x2c4] = ev2c4;
-                ev2c4.Jsr(0x350 + eventConversions[crystalOrbColorMap[ORBMAP_LUNAPALACE] - 0x81]); // change to check element we want
-                ev2c4.Logic((byte)(0x98 + eventConversions[crystalOrbColorMap[ORBMAP_LUNAPALACE] - 0x81]), 0x1, 0x3, EventScript.GetJumpCmd(0x2c5)); // change to any spell acceptable (1-3)
-                ev2c4.End();
-            }
-
-            // 25a - upper land; sylphid in vanilla
-            if (flammieDrumInLogic)
-            {
-                if (crystalOrbColorMap[ORBMAP_UPPERLAND] != 0xFF)
-                {
-                    EventScript ev25a = new EventScript();
-                    replacementEvents[0x25a] = ev25a;
-                    ev25a.Jsr(0x350 + eventConversions[crystalOrbColorMap[ORBMAP_UPPERLAND] - 0x81]); // change to check element we want
-                    ev25a.Logic((byte)(0x98 + eventConversions[crystalOrbColorMap[ORBMAP_UPPERLAND] - 0x81]), 0x1, 0x3, EventScript.GetJumpCmd(0x25b)); // change to any spell acceptable (1-3)
-                    ev25a.End();
-                }
-            }
-
-            // set the lost continent ones
-            if (!spriteExists || !girlExists || randomizeGrandPalace)
-            {
-                for(int mapId = ORBMAP_GRANDPALACE_FIRST; mapId <= ORBMAP_GRANDPALACE_LAST; mapId++) // skip dryad map, which is actually 419
-                {
-                    if (crystalOrbColorMap[mapId] != 0xFF)
-                    {
-                        EventScript ev = new EventScript();
-                        replacementEvents[0x570 + (mapId - ORBMAP_GRANDPALACE_FIRST)] = ev;
-                        ev.Jsr(0x350 + eventConversions[crystalOrbColorMap[mapId] - 0x81]); // change to check element we want
-                        ev.Logic((byte)(0x98 + eventConversions[crystalOrbColorMap[mapId] - 0x81]), 0x0, 0x0, EventScript.GetJumpCmd(0)); // skip if any spell of right element cast
-                        ev.IncrFlag((byte)(0xE8 + (mapId - ORBMAP_GRANDPALACE_FIRST))); // change to set element we want
-                        ev.Jump(0x578);
-                        ev.End();
-                    }
-                }
-            }
-
-            // map header[1] & 7F = palette
-            // lumina palette = 93, shade palette = 92
-            else if(!spriteExists && girlExists)
-            {
-                // set all the palettes to lumina
-                for (int mapId = ORBMAP_GRANDPALACE_FIRST; mapId <= ORBMAP_GRANDPALACE_LAST; mapId++) // skip dryad map, which is actually 419
-                {
-                    int mapObjOffset = 0x80000 + rom[0x87000 + mapId * 2] + (rom[0x87000 + mapId * 2 + 1] << 8);
-                    bool msb = (rom[mapObjOffset + 1] & 0x80) > 0;
-                    rom[mapObjOffset + 1] = 93;
-                    if(msb)
-                    {
-                        rom[mapObjOffset + 1] |= 0x80;
-                    }
-                }
-            }
-
-            else if (spriteExists && !girlExists)
-            {
-                // set the lumina palette to shade
-                int mapId = MAPNUM_GRANDPALACE_LUMINA_ORB;
-                int mapObjOffset = 0x80000 + rom[0x87000 + mapId * 2] + (rom[0x87000 + mapId * 2 + 1] << 8);
-                bool msb = (rom[mapObjOffset + 1] & 0x80) > 0;
-                rom[mapObjOffset + 1] = 92;
-                if (msb)
-                {
-                    rom[mapObjOffset + 1] |= 0x80;
-                }
-            }
-        }
-
+				if (!plando.ContainsKey(KEY_GRAND_PALACE_ORB_7_ELEMENT))
+				{
+					crystalOrbColorMap[ORBMAP_GRANDPALACE7] = orbElementsAvailable[(r.Next() % orbElementsAvailable.Count)];
+				}
+			}
+		}
         public static List<byte> GetValidOrbElements(bool girlExists, bool spriteExists)
         {
             List<byte> orbElementsAvailable = new List<byte>();
