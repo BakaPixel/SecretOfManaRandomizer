@@ -43,7 +43,7 @@ namespace SoMRandomizer.processing.openworld
             StringValueSettings working = context.workingData;
             string startingChar = settings.get(OpenWorldSettings.PROPERTYNAME_STARTING_CHAR);
             //working.set(STARTING_CHARACTER, settings.get(OpenWorldSettings.PROPERTYNAME_STARTING_CHAR));
-            if (startingChar == "chaos")
+            if (startingChar == "random" )
             {
                 int startingCharVal = r.Next() % 3;
                 switch (startingCharVal)

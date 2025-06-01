@@ -133,21 +133,23 @@ namespace SoMRandomizer.processing.openworld.events
 
             // silly shit to say after you fall
             List<string> introDialogues = new string[] {
-                    "Who was that idiot?",
-                    "Look for me later at the\nMantis Ant fight",
-                    "And then there were two",
-                    "Let's see what's to\nthe left",
-                    "Thanks for choosing Secret\nof Mana Randomizer",
-                    "Blame Moppleton for\nany softlocks :3",
-                    "Coming soon:\nSD3 Randomizer!\nby someone else.",
-                    "Man, there's a\nrandomizer for everything\nthese days",
-                    "Your ad here:\n10000 GP",
-                    "Open world:\nnow 20% more open!",
-                    "Totally not a ripoff of\nFF4 Free Enterprise",
-                    "This is a good game\nand it works well",
-                    "Oh no!\n\nAnyway",
-                    VanillaEventUtil.wordWrapText("That's some bad hat, Harry"),
-            }.ToList();
+     //               "Who was that idiot?",
+     //               "Look for me later at the\nMantis Ant fight",
+     //               "And then there were two",
+     //               "Let's see what's to\nthe left",
+     //               "Thanks for choosing Secret\nof Mana Randomizer",
+     //               "Blame Moppleton for\nany softlocks :3",
+     //               "Coming soon:\nSD3 Randomizer!\nby someone else.",
+     //               "Man, there's a\nrandomizer for everything\nthese days",
+     //               "Your ad here:\n10000 GP",
+     //               "Open world:\nnow 20% more open!",
+     //               "Totally not a ripoff of\nFF4 Free Enterprise",
+     //               "This is a good game\nand it works well",
+     //               "Oh no!\n\nAnyway",
+					//VanillaEventUtil.wordWrapText("That's some bad hat, Harry"),
+					VanillaEventUtil.wordWrapText("Where's the kaboom? There was supposed to be an Earth-shattering kaboom!"),
+					VanillaEventUtil.wordWrapText("Player go down the hole~"),  // Ducky :3
+			}.ToList();
 
             string[] lttpPlaces = new string[]
             {

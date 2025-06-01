@@ -133,13 +133,15 @@ namespace SoMRandomizer.processing.openworld.randomization
                 "Oh hey, it's %1.",
                 "Just for you: %1.",
                 "Well, if it isn't %1!",
-            };
+				"Now with more%1."
+			};
 
 
             // grab starting weapons from context
             int boyStarterWeapon = context.workingData.getInt(StartingWeaponRandomizer.BOY_START_WEAPON_INDEX);
             int girlStarterWeapon = context.workingData.getInt(StartingWeaponRandomizer.GIRL_START_WEAPON_INDEX);
             int spriteStarterWeapon = context.workingData.getInt(StartingWeaponRandomizer.SPRITE_START_WEAPON_INDEX);
+			Console.WriteLine($"B:{boyStarterWeapon}, G:{girlStarterWeapon}, S:{spriteStarterWeapon}");
             // weapons we give as prizes - don't include starter ones
             List<int> weaponIndexes = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 }.ToList();
             weaponIndexes.Remove(boyStarterWeapon);
@@ -166,7 +168,7 @@ namespace SoMRandomizer.processing.openworld.randomization
             }
 
             byte starterWeaponFlag = 0;
-
+			Console.WriteLine(startingChar);
             if (startingChar == OpenWorldPrizeNames.BOY)
             {
                 starterWeaponFlag = (byte)(0xC0 + boyStarterWeapon);
@@ -193,6 +195,8 @@ namespace SoMRandomizer.processing.openworld.randomization
             startingRewardsEventData.Add(0x08); // used for "update weapons" here
             startingRewardsEventData.Add(EventCommandEnum.HEAL.Value);
             startingRewardsEventData.Add(0x44); // full heal, presumably
+
+			Console.WriteLine($"{starterWeaponId}: the {SomVanillaValues.weaponByteToName(starterWeaponId)}");
 
             startingRewardsEventData.AddRange(getRandomGiftText(r, prizePrefixes, "the " + SomVanillaValues.weaponByteToName(starterWeaponId)));
 

@@ -46,7 +46,7 @@ namespace SoMRandomizer.processing.openworld.randomization
                     }
                 }
             }
-
+			Console.WriteLine($"SC:{startingChar} B:{boyExists}, G:{girlExists}, S:{spriteExists}, FSW:{forceStartWeapon}");
             if (boyExists)
             {
                 if (startingChar == "boy" && forceStartWeapon != -1)

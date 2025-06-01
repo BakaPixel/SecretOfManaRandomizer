@@ -40,7 +40,7 @@ namespace SoMRandomizer.processing.openworld
             List<string> randomClass = new string[] { "OGboy", "OGgirl", "OGsprite" }.ToList();
             List<string> randomUniqueClass = new string[] { "OGboy", "OGgirl", "OGsprite" }.ToList();
 
-            if (boyClass == "chaos" )
+            if (boyClass == "random" )
             {
                 boyClass = randomClass[r.Next() % randomClass.Count];
             }
@@ -48,7 +48,7 @@ namespace SoMRandomizer.processing.openworld
             {
                 randomUniqueClass.Remove(boyClass);
             }
-            if (girlClass == "chaos" )
+            if (girlClass == "random" )
             {
                 girlClass = randomClass[r.Next() % randomClass.Count];
             }
@@ -56,7 +56,7 @@ namespace SoMRandomizer.processing.openworld
             {
                 randomUniqueClass.Remove(girlClass);
             }
-            if (spriteClass == "chaos" )
+            if (spriteClass == "random" )
             {
                 spriteClass = randomClass[r.Next() % randomClass.Count];
             }

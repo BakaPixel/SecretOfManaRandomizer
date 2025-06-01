@@ -35,11 +35,11 @@ public static class NativeAPI
 		RandoContext context = new RandoContext();
 
 		var gen = new OpenWorldGenerator();
-		StartingWeaponRandomizer.setStartingWeapons(openWorldSettings, context);
 
 		gen.owFirstHacks();
 		RomGenerator.preGenerate(genConfig.seed, openWorldSettings, context);
 		gen.owPreApplyHacks(genConfig.seed, openWorldSettings, context);
+		StartingWeaponRandomizer.setStartingWeapons(openWorldSettings, context);
 		List<PrizeLocation> lpl = OpenWorldLocations.getForSelectedOptions(openWorldSettings, context);
 		List<PrizeItem> lpi = OpenWorldPrizes.getForSelectedOptions(openWorldSettings, context, lpl);
 

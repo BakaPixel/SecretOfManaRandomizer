@@ -32,7 +32,7 @@ namespace SoMRandomizer.native
 				(
 					(string)item["prizeName"],
 					(string)item["prizeType"],
-					Encoding.UTF8.GetBytes((string)item["data"]),
+					item["data"].Select(i => (byte)i).ToArray(),
 					(string)item["hint"],
 					(byte)item["eventFlag"],
 					(double)item["prizeValue"]

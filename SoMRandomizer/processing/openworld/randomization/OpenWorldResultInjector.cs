@@ -32,7 +32,6 @@ namespace SoMRandomizer.processing.openworld.randomization
                 int eventNum = prizeLocation.eventNum;
                 int index = prizeLocation.eventReplacementIndex;
                 PrizeItem thisPrize = prizePlacements[prizeLocation];
-				Console.WriteLine($"{prizeLocation.locationName}: {prizeLocation.eventNum} + {prizeLocation.eventReplacementIndex} - {thisPrize.prizeName}");
 
 				List<byte> eventData = context.replacementEvents[eventNum];
                 List<byte> injectionPattern = new List<byte>();
@@ -41,10 +40,6 @@ namespace SoMRandomizer.processing.openworld.randomization
                     injectionPattern.Add(b);
                 }
                 injectionPattern.Add((byte)index);
-				Console.WriteLine(string.Join(" ", injectionPattern.Select(b => b.ToString("X2"))));
-				Console.WriteLine(string.Join(" ", eventData.Select(b => b.ToString("X2"))));
-				Console.WriteLine(string.Join(" ", thisPrize.eventData.ToList().Select(b => b.ToString("X2"))));
-				Console.WriteLine();
 				VanillaEventUtil.replaceEventData(injectionPattern, eventData, thisPrize.eventData.ToList());
 
                 // set the visibility flag for chests so they disappear once giving their prize.

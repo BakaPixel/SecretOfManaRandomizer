@@ -1,6 +1,7 @@
 ﻿
 using SoMRandomizer.native;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SoMRandomizer.processing.openworld.randomization
 {
@@ -50,7 +51,7 @@ namespace SoMRandomizer.processing.openworld.randomization
 			//outDict.Add("PRIZE_UID", PRIZE_UID); // Not needed since everything has the same PRIZE_UID?
 			outDict.Add("prizeName", prizeName);
 			outDict.Add("prizeType", prizeType);
-			outDict.Add("eventData", eventData);
+			outDict.Add("eventData", eventData.Select(b => (int)b).ToList());
 			outDict.Add("hintName", hintName);
 			outDict.Add("gotItemEventFlag", gotItemEventFlag);
 			outDict.Add("value", value);
